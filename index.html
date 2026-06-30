@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIAKAD - Login Sistem Informasi Ujian</title>
+    <style>
+         :root {
+            --primary: #0b6623;
+            --primary-light: #1b8a3e;
+            --accent: #d4af37;
+            --dark: #2c3e50;
+            --bg: #f3f4f6;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0b6623 0%, #1b8a3e 100%);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        
+        .login-box {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 380px;
+            border-top: 6px solid var(--accent);
+            text-align: center;
+        }
+        
+        .logo-area {
+            font-size: 50px;
+            margin-bottom: 10px;
+        }
+        
+        h2 {
+            margin: 0;
+            color: var(--dark);
+            font-size: 22px;
+            font-weight: 700;
+        }
+        
+        p {
+            color: #7f8c8d;
+            font-size: 13px;
+            margin: 5px 0 25px 0;
+        }
+        
+        .form-group {
+            text-align: left;
+            margin-bottom: 18px;
+        }
+        
+        label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 6px;
+        }
+        
+        select,
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            box-sizing: border-box;
+            background-color: #fafafa;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+        
+        select:focus,
+        input:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: white;
+            box-shadow: 0 0 0 3px rgba(11, 102, 35, 0.1);
+        }
+        
+        .btn-login {
+            width: 100%;
+            padding: 14px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            text-transform: uppercase;
+            margin-top: 10px;
+            transition: 0.3s;
+        }
+        
+        .btn-login:hover {
+            background: var(--primary-light);
+        }
+        
+        .footer-text {
+            margin-top: 25px;
+            font-size: 11px;
+            color: #b2bec3;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="login-box">
+        <div class="logo-area">🎓</div>
+        <h2>Portal Tugas Akhir</h2>
+        <p>Pilih hak akses untuk masuk ke sistem</p>
+
+        <form id="loginForm">
+            <div class="form-group">
+                <label>PORTAL UTAMA</label>
+                <select id="roleSelect">
+                <option value="mahasiswa">Portal Mahasiswa (Simulasi Akses)</option>
+                <option value="dosen">Portal Dosen Pembimbing & Penguji</option>
+                <option value="admin">Portal Admin Program Studi</option>
+            </select>
+            </div>
+            <div class="form-group">
+                <label>IDENTITAS PENGGUNA</label>
+                <input type="text" value="user_akademik" readonly style="color: #95a5a6;">
+            </div>
+            <button type="submit" class="btn-login">Masuk Aplikasi</button>
+        </form>
+
+        <div class="footer-text">
+            &copy; 2026 Jurusan Sistem Informasi
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const role = document.getElementById('roleSelect').value;
+            if (role === 'mahasiswa') window.location.href = 'dashboard_mahasiswa.html';
+            else if (role === 'dosen') window.location.href = 'dashboard_dosen.html';
+            else if (role === 'admin') window.location.href = 'dashboard_admin.html';
+        });
+    </script>
+
+</body>
+
+</html>
