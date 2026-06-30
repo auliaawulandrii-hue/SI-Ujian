@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Mahasiswa - Portal Tugas Akhir</title>
+    <style>
+        * { font-family: 'Segoe UI', Arial, Helvetica, sans-serif; box-sizing: border-box; }
+        :root { --primary: #0b6623; --accent: #d4af37; --dark: #2c3e50; --bg: #f4f6f9; }
+        body { margin: 0; display: flex; background: var(--bg); color: var(--dark); }
+        
+        /* Sidebar Layout */
+        .sidebar { width: 260px; background: #1e272e; height: 100vh; color: white; position: fixed; padding: 20px 0; }
+        .sidebar .brand { padding: 0 25px 20px 25px; border-bottom: 1px solid #34495e; font-size: 18px; font-weight: bold; color: var(--accent); }
+        .sidebar .menu-item { padding: 15px 25px; display: block; color: #dcdde1; text-decoration: none; font-size: 14px; transition: 0.3s; }
+        .sidebar .menu-item.active, .sidebar .menu-item:hover { background: var(--primary); color: white; }
+        
+        /* Main Content */
+        .main-content { margin-left: 260px; padding: 40px; width: 100%; }
+        .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        .user-info h2 { margin: 0; font-size: 22px; color: #1e3c72; }
+        
+        .card { background: white; padding: 25px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.03); margin-bottom: 30px; border-left: 4px solid var(--primary); }
+        .card-title { font-size: 15px; font-weight: bold; margin-bottom: 20px; color: var(--primary); text-transform: uppercase; }
+        
+        label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 6px; color: #555; margin-top: 10px; }
+        input, select, textarea { width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 6px; background-color: #fafafa; font-size: 14px; }
+        textarea { height: 80px; resize: vertical; }
+        
+        .grup-berkas { background: #f8f9fa; padding: 15px; border-radius: 6px; border: 1px dashed #ccc; margin-bottom: 20px; }
+        
+        .btn-submit { background: var(--primary); color: white; border: none; padding: 12px 25px; border-radius: 6px; cursor: pointer; font-weight: bold; text-transform: uppercase; font-size: 13px; }
+        .btn-submit:hover { background: #084d1a; }
+    </style>
+</head>
+
+<body>
+
+    <div class="sidebar">
+        <div class="brand">🎓 Dashboard Mahasiswa</div>
+        <a href="dashboard_mahasiswa.html" class="menu-item active">Formulir Registrasi</a>
+        <a href="status_mahasiswa.html" class="menu-item">Status Validasi</a>
+        <a href="index.html" class="menu-item" style="margin-top: 45vh; color: #e74c3c;">Keluar </a>
+    </div>
+
+    <div class="main-content">
+        <div class="top-bar">
+            <div class="user-info">
+                <h2>Portal Mahasiswa Aktif</h2>
+                <small style="font-size: 14px; color: #555;">Selamat Datang, <b>Aulia Wulandari</b> (60900124062)</small>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">FORMULIR REGISTRASI UJIAN (MULTI-UPLOAD)</div>
+            <form id="formDaftar">
+                <label>JENIS SIDANG / UJIAN</label>
+                <select id="jenisUjian" onchange="sesuaikanFormBerkas()">
+                    <option value="Proposal">Ujian Proposal</option>
+                    <option value="Hasil">Ujian Hasil (Revisi)</option>
+                    <option value="Munaqasyah" disabled>Ujian Tutup / Munaqasyah (Terkunci - Selesaikan Revisi Hasil)</option>
+                </select>
+
+                <label>JUDUL TUGAS AKHIR</label>
+                <textarea id="judulTA" placeholder="Ketikkan judul lengkap tugas akhir Anda..." required></textarea>
+
+                <!-- TEMPAT INPUT BERKAS TERPISAH SECARA DINAMIS -->
+                <div id="areaUnggahBerkas" class="grup-berkas"></div>
+
+                <button type="submit" class="btn-submit">Submit Dokumen Pendaftaran</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Logika Menampilkan Berkas yang Berbeda Tergantung Pilihan Ujian
+        function sesuaikanFormBerkas() {
+            const jenisUjian = document.getElementById('jenisUjian').value;
+            const areaBerkas = document.getElementById('areaUnggahBerkas');
+            
+            if (jenisUjian === 'Proposal') {
+                areaBerkas.innerHTML = `
+                    <h4 style="margin: 0 0 15px 0; color: var(--primary);">Persyaratan Dokumen Proposal:</h4>
+                    
+                    <label>1. MANUSKRIP/DRAF PROPOSAL </label>
+                    <input type="file" class="berkas-wajib" id="fileDraft" accept=".pdf" required>
+                    
+                    <label>2. LEMBAR PERSETUJUAN PEMBIMBING </label>
+                    <input type="file" class="berkas-wajib" id="filePersetujuan" accept=".pdf" required>
+                    
+                    <label>3. KARTU KONTROL BIMBINGAN </label>
+                    <input type="file" class="berkas-wajib" id="fileKartu" accept=".pdf" required>
+                    
+                    <label>4. TRANSKRIP NILAI SEMENTARA </label>
+                    <input type="file" class="berkas-wajib" id="fileTranskrip" accept=".pdf" required>
+                `;
+            } else if (jenisUjian === 'Hasil') {
+                areaBerkas.innerHTML = `
+                    <h4 style="margin: 0 0 15px 0; color: var(--primary);">Persyaratan Dokumen Seminar Hasil (Revisi):</h4>
+                    
+                    <label>1. MANUSKRIP LENGKAP BAB I - V </label>
+                    <input type="file" class="berkas-wajib" id="fileDraftHasil" accept=".pdf" required>
+                    
+                    <label>2. SURAT KETERANGAN SELESAI PENELITIAN </label>
+                    <input type="file" class="berkas-wajib" id="fileSelesaiPenelitian" accept=".pdf" required>
+                    
+                    <label>3. SERTIFIKAT TOEFAL / BUKTI LUARAN ARTIKEL </label>
+                    <input type="file" class="berkas-wajib" id="filePendukung" accept=".pdf" required>
+                `;
+            }
+        }
+
+        // Jalankan fungsi penyesuaian saat pertama kali halaman dimuat
+        sesuaikanFormBerkas();
+
+        // Proses submit data ke localStorage
+        document.getElementById('formDaftar').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Validasi format file untuk semua inputan berkas wajib
+            const files = document.querySelectorAll('.berkas-wajib');
+            let semuaPdf = true;
+            let namaBerkasUtama = "";
+
+            files.forEach((fileInput, indeks) => {
+                if (fileInput.files[0]) {
+                    const namaFile = fileInput.files[0].name;
+                    if (!namaFile.toLowerCase().endsWith('.pdf')) {
+                        semuaPdf = false;
+                    }
+                    // Ambil berkas nomor satu (Manuskrip) untuk dicatat ke database simulasi
+                    if (indeks === 0) namaBerkasUtama = namaFile;
+                }
+            });
+
+            if (!semuaSdf) {
+                alert('Error Validasi: Semua dokumen persyaratan wajib berformat .pdf!');
+                return;
+            }
+
+            const jenisDipilih = document.getElementById('jenisUjian').value;
+            const judulBaru = document.getElementById('judulTA').value;
+
+            let db = JSON.parse(localStorage.getItem('database_ujian')) || [];
+            const indeksDataLama = db.findIndex(item => item.jenis === jenisDipilih && item.kelulusan === 'tidak lulus');
+
+            if (indeksDataLama !== -1) {
+                db[indeksDataLama].judul = judulBaru;
+                db[indeksDataLama].berkas = namaBerkasUtama;
+                db[indeksDataLama].statusPersetujuan = 'proses';
+                db[indeksDataLama].statusVerifikasiAdmin = 'proses';
+                db[indeksDataLama].jadwal = 'Menunggu konfirmasi berkas resmi revisi';
+                db[indeksDataLama].nilai = '-';
+                db[indeksDataLama].kelulusan = 'PROSES';
+                alert('Seluruh dokumen revisi terpisah berhasil dikirim! Silakan periksa halaman Status Validasi.');
+            } else {
+                db.push({
+                    id: Date.now(),
+                    jenis: jenisDipilih,
+                    judul: judulBaru,
+                    berkas: namaBerkasUtama,
+                    statusPersetujuan: 'proses',
+                    statusVerifikasiAdmin: 'proses',
+                    jadwal: 'Menunggu konfirmasi prodi',
+                    nilai: '-',
+                    kelulusan: 'PROSES'
+                });
+                alert('Sukses melakukan pendaftaran baru dengan berkas terpisah!');
+            }
+
+            localStorage.setItem('database_ujian', JSON.stringify(db));
+            this.reset();
+            sesuaikanFormBerkas(); // reset layout kolom input file
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard Admin Prodi - Modul Pelaporan</title>
+    <style>
+        * {
+            font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
+            box-sizing: border-box;
+        }
+        
+         :root {
+            --primary: #0b6623;
+            --accent: #d4af37;
+            --dark: #2c3e50;
+            --bg: #f4f6f9;
+        }
+        
+        body {
+            margin: 0;
+            display: flex;
+            background: var(--bg);
+            color: var(--dark);
+        }
+        
+        .sidebar {
+            width: 260px;
+            background: #1e272e;
+            height: 100vh;
+            color: white;
+            position: fixed;
+            padding: 20px 0;
+        }
+        
+        .sidebar .brand {
+            padding: 0 25px 20px 25px;
+            border-bottom: 1px solid #34495e;
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--accent);
+        }
+        
+        .sidebar .menu-item {
+            padding: 15px 25px;
+            display: block;
+            color: #dcdde1;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        
+        .sidebar .menu-item.active {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .main-content {
+            margin-left: 260px;
+            padding: 40px;
+            width: 100%;
+        }
+        
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
+            margin-bottom: 30px;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .card-title {
+            font-size: 15px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: var(--primary);
+            text-transform: uppercase;
+        }
+        
+        input,
+        select,
+        button {
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            width: 100%;
+            font-size: 14px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            margin-top: 15px;
+        }
+        
+        th,
+        td {
+            padding: 12px;
+            border: 1px solid #dee2e6;
+            text-align: left;
+        }
+        
+        th {
+            background: #f8f9fa;
+            color: #555;
+            font-weight: 600;
+        }
+        
+        .btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        
+        .btn-print {
+            background: #27ae60;
+            margin-bottom: 15px;
+            width: auto;
+        }
+        
+        @media print {
+            .no-print {
+                display: none;
+            }
+            body {
+                background: white;
+            }
+            .sidebar {
+                display: none;
+            }
+            .main-content {
+                margin-left: 0;
+                padding: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="sidebar no-print">
+        <div class="brand">🎓 Dashboard ADMIN</div>
+        <a href="#" class="menu-item active">Jadwal & Laporan</a>
+        <a href="index.html" class="menu-item" style="margin-top: 50vh; color: #e74c3c;">Keluar</a>
+    </div>
+
+    <div class="main-content">
+        <h2 class="no-print" style="color: #1e3c72; margin: 0 0 25px 0;">Panel Pengelolaan Data Administrasi Prodi</h2>
+
+        <div class="card no-print">
+            <div class="card-title">Distribusi Penjadwalan Otomatis</div>
+            <form id="formJadwal">
+                <label style="display:block; font-size:12px; font-weight:600; margin-bottom:5px;">Pilih Peserta Valid (Telah Disetujui Pembimbing)</label>
+                <select id="pilihMhs" required></select>
+
+                <label style="display:block; font-size:12px; font-weight:600; margin-bottom:5px;">Tanggal & Jam Pelaksanaan Sidang</label>
+                <input type="datetime-local" id="waktuUjian" required>
+
+                <button type="submit" class="btn">Terbitkan Jadwal Ujian Resmi</button>
+            </form>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Dokumen Jurnal Statistik Kelulusan</div>
+            <button class="no-print btn btn-print" onclick="window.print()">Cetak / Ekspor Laporan (PDF)</button>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Jenis Ujian</th>
+                        <th>Nama Mahasiswa</th>
+                        <th>Judul Penelitian Tugas Akhir</th>
+                        <th>Agenda Sidang</th>
+                        <th>Nilai</th>
+                        <th>Hasil Keputusan</th>
+                    </tr>
+                </thead>
+                <tbody id="tabelLaporan"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        let db = JSON.parse(localStorage.getItem('database_ujian')) || [];
+
+        function init() {
+            const selectMhs = document.getElementById('pilihMhs');
+            const tbody = document.getElementById('tabelLaporan');
+            selectMhs.innerHTML = '';
+            tbody.innerHTML = '';
+
+            let adaMhs = false;
+
+            db.forEach(item => {
+                if (item.statusPersetujuan === 'setuju' && item.statusVerifikasiAdmin === 'proses') {
+                    adaMhs = true;
+                    const opt = document.createElement('option');
+                    opt.value = item.id;
+                    opt.textContent = `Aulia Wulandari - ${item.jenis}`;
+                    selectMhs.appendChild(opt);
+                }
+
+                tbody.innerHTML += `
+                <tr>
+                    <td><b>${item.jenis}</b></td>
+                    <td>Aulia Wulandari (60900124062)</td>
+                    <td>${item.judul}</td>
+                    <td><small>${item.jadwal}</small></td>
+                    <td style="text-align:center;"><b>${item.nilai}</b></td>
+                    <td><b style="color:${item.kelulusan === 'PROSES' ? 'orange' : 'green'}">${item.kelulusan.toUpperCase()}</b></td>
+                </tr>`;
+            });
+
+            if (!adaMhs) selectMhs.innerHTML = '<option value="">Tidak ada berkas tervalidasi yang siap dijadwalkan.</option>';
+        }
+
+        document.getElementById('formJadwal').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const id = document.getElementById('pilihMhs').value;
+            const waktu = document.getElementById('waktuUjian').value;
+            if (!id) return;
+
+            db = db.map(i => {
+                if (i.id == id) {
+                    i.statusVerifikasiAdmin = 'lengkap';
+                    i.jadwal = `Waktu: ${waktu.replace('T', ' ')} | Tempat: Ruang Sidang FST Utama | Penguji: Nahrun Hartono, M.Kom`;
+                }
+                return i;
+            });
+
+            localStorage.setItem('database_ujian', JSON.stringify(db));
+            alert('Jadwal resmi berhasil diterbitkan tanpa bentrok struktural!');
+            init();
+        });
+
+        init();
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Status Akademik - Portal Tugas Akhir</title>
+    <style>
+        * { font-family: 'Segoe UI', Arial, Helvetica, sans-serif; box-sizing: border-box; }
+        :root { --primary: #0b6623; --accent: #d4af37; --dark: #2c3e50; --bg: #f4f6f9; }
+        body { margin: 0; display: flex; background: var(--bg); color: var(--dark); }
+        
+        /* Sidebar Layout */
+        .sidebar { width: 260px; background: #1e272e; height: 100vh; color: white; position: fixed; padding: 20px 0; }
+        .sidebar .brand { padding: 0 25px 20px 25px; border-bottom: 1px solid #34495e; font-size: 18px; font-weight: bold; color: var(--accent); }
+        .sidebar .menu-item { padding: 15px 25px; display: block; color: #dcdde1; text-decoration: none; font-size: 14px; transition: 0.3s; }
+        .sidebar .menu-item.active, .sidebar .menu-item:hover { background: var(--primary); color: white; }
+        
+        /* Main Content */
+        .main-content { margin-left: 260px; padding: 40px; width: 100%; }
+        .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        .user-info h2 { margin: 0; font-size: 22px; color: #1e3c72; }
+        
+        .card { background: white; padding: 25px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.03); margin-bottom: 30px; border-left: 4px solid var(--primary); }
+        .card-title { font-size: 15px; font-weight: bold; margin-bottom: 20px; color: var(--primary); text-transform: uppercase; }
+        
+        table { width: 100%; border-collapse: collapse; font-size: 14px; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; }
+        th { background: #f8f9fa; color: #555; font-weight: 600; }
+        
+        /* Badge Status */
+        .badge { padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; color: white; text-transform: uppercase; }
+        .proses { background: #f39c12; }
+        .setuju, .lulus { background: #2ecc71; }
+        .revisi, .tidak-lulus { background: #e74c3c; }
+    </style>
+</head>
+
+<body>
+
+    <div class="sidebar">
+        <div class="brand">🎓 Dashboard Mahasiswa</div>
+        <a href="dashboard_mahasiswa.html" class="menu-item">Formulir Registrasi</a>
+        <a href="status_mahasiswa.html" class="menu-item active">Status Validasi</a>
+        <a href="index.html" class="menu-item" style="margin-top: 45vh; color: #e74c3c;">Keluar </a>
+    </div>
+
+    <div class="main-content">
+        <div class="top-bar">
+            <div class="user-info">
+                <h2>Portal Mahasiswa Aktif</h2>
+                <small style="font-size: 14px; color: #555;">Selamat Datang, <b>Aulia Wulandari</b> (60900124062)</small>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">STATUS VALIDASI & HASIL NILAI AKADEMIK</div>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 15%;">Jenis Ujian</th>
+                        <th style="width: 40%;">Judul Penelitian</th>
+                        <th style="width: 20%;">Status Pembimbing</th>
+                        <th style="width: 15%;">Jadwal Pelaksanaan</th>
+                        <th style="width: 15%;">Nilai Akhir</th>
+                    </tr>
+                </thead>
+                <tbody id="tabelMhs"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        function loadTabelMhs() {
+            const db = JSON.parse(localStorage.getItem('database_ujian')) || [];
+            const tbody = document.getElementById('tabelMhs');
+            tbody.innerHTML = '';
+
+            db.forEach(item => {
+                let badgeClass = 'proses';
+                if (item.kelulusan === 'lulus') badgeClass = 'lulus';
+                if (item.kelulusan === 'tidak lulus') badgeClass = 'tidak-lulus';
+
+                tbody.innerHTML += `
+                <tr>
+                    <td><b>${item.jenis}</b></td>
+                    <td>${item.judul}</td>
+                    <td><span class="badge ${item.statusPersetujuan}">${item.statusPersetujuan}</span></td>
+                    <td><small>${item.jadwal}</small></td>
+                    <td><b>${item.nilai}</b> / <span class="badge ${badgeClass}">${item.kelulusan}</span></td>
+                </tr>`;
+            });
+        }
+
+        // Jalankan fungsi load data saat halaman status dibuka
+        loadTabelMhs();
+    </script>
+</body>
+</html>

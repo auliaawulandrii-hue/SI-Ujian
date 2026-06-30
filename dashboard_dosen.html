@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard Dosen - Panel Evaluasi</title>
+    <style>
+        * {
+            font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
+            box-sizing: border-box;
+        }
+        
+         :root {
+            --primary: #0b6623;
+            --accent: #d4af37;
+            --dark: #2c3e50;
+            --bg: #f4f6f9;
+        }
+        
+        body {
+            margin: 0;
+            display: flex;
+            background: var(--bg);
+            color: var(--dark);
+        }
+        
+        .sidebar {
+            width: 260px;
+            background: #1e272e;
+            height: 100vh;
+            color: white;
+            position: fixed;
+            padding: 20px 0;
+        }
+        
+        .sidebar .brand {
+            padding: 0 25px 20px 25px;
+            border-bottom: 1px solid #34495e;
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--accent);
+        }
+        
+        .sidebar .menu-item {
+            padding: 15px 25px;
+            display: block;
+            color: #dcdde1;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        
+        .sidebar .menu-item.active {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .main-content {
+            margin-left: 260px;
+            padding: 40px;
+            width: 100%;
+        }
+        
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
+            margin-bottom: 30px;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .card-title {
+            font-size: 15px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: var(--primary);
+            text-transform: uppercase;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+        
+        th,
+        td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        th {
+            background: #f8f9fa;
+            color: #555;
+        }
+        
+        select,
+        input,
+        button,
+        textarea {
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            font-size: 14px;
+        }
+        
+        textarea {
+            width: 100%;
+            height: 50px;
+            resize: vertical;
+        }
+        
+        button {
+            background: var(--primary);
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+            border: none;
+            text-transform: uppercase;
+            font-size: 12px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="sidebar">
+        <div class="brand">🎓 DASHBOARD DOSEN</div>
+        <a href="#" class="menu-item active">Evaluasi & Nilai</a>
+        <a href="index.html" class="menu-item" style="margin-top: 50vh; color: #e74c3c;">Keluar</a>
+    </div>
+
+    <div class="main-content">
+        <h2 style="color: #1e3c72; margin: 0 0 10px 0;">Portal Dosen Pembimbing & Penguji</h2>
+        <p style="color: #6c757d; margin-bottom: 30px;">Gunakan panel di bawah ini untuk memproses kelayakan berkas dan penilaian ujian mahasiswa bimbingan Anda.</p>
+
+        <div class="card">
+            <div class="card-title">Lembar Persetujuan Kelayakan Bimbingan</div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Mahasiswa</th>
+                        <th>Ujian</th>
+                        <th>Judul Penelitian</th>
+                        <th>Lampiran</th>
+                        <th>Keputusan</th>
+                    </tr>
+                </thead>
+                <tbody id="tabelBimbingan"></tbody>
+            </table>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Input Nilai & Keputusan Kelulusan Akhir</div>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 25%;">Agenda Sidang</th>
+                        <th style="width: 40%;">Informasi Penelitian</th>
+                        <th style="width: 35%;">Input Lembar Evaluasi</th>
+                    </tr>
+                </thead>
+                <tbody id="tabelMenguji"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Membaca data yang diisi oleh dashboard mahasiswa
+        function render() {
+            const db = JSON.parse(localStorage.getItem('database_ujian')) || [];
+            const tBimbingan = document.getElementById('tabelBimbingan');
+            const tMenguji = document.getElementById('tabelMenguji');
+
+            tBimbingan.innerHTML = '';
+            tMenguji.innerHTML = '';
+
+            let bimb = false;
+            let sid = false;
+
+            db.forEach(item => {
+                // Tampilkan untuk Proses 3.0 jika status persetujuan adalah 'proses'
+                if (item.statusPersetujuan === 'proses') {
+                    bimb = true;
+                    tBimbingan.innerHTML += `
+                    <tr>
+                        <td>Aulia Wulandari (60900124062)</td>
+                        <td><b>${item.jenis}</b></td>
+                        <td>${item.judul}</td>
+                        <td><a href="#" style="color:var(--primary); font-weight:600; text-decoration:none;">📄 ${item.berkas}</a></td>
+                        <td>
+                            <select id="aksi-${item.id}">
+                                <option value="setuju">Setuju (Layak)</option>
+                                <option value="revisi">Revisi</option>
+                            </select>
+                            <button onclick="simpanAksi(${item.id})">Simpan</button>
+                        </td>
+                    </tr>`;
+                }
+
+                // Tampilkan untuk Proses 5.0 jika sudah dijadwalkan oleh admin
+                // Menyaring agar data ujian hasil (nilai '7') atau data baru (nilai '-') bisa diinput nilai barunya
+                if (item.statusVerifikasiAdmin === 'lengkap') {
+                    if (item.nilai === '-' || item.nilai === '7') {
+                        sid = true;
+                        tMenguji.innerHTML += `
+                        <tr>
+                            <td><b>${item.jenis}</b><br><small style="color:gray;">${item.jadwal}</small></td>
+                            <td><i>${item.judul}</i></td>
+                            <td>
+                                <div style="margin-bottom:8px;">
+                                    <label style="font-size:12px; font-weight:600;">Nilai (0-100):</label> 
+                                    <input type="number" id="skor-${item.id}" value="${item.nilai !== '-' ? item.nilai : ''}" style="width:70px;" min="0" max="100" required>
+                                </div>
+                                <div style="margin-bottom:8px;">
+                                    <label style="font-size:12px; font-weight:600;">Catatan Revisi:</label>
+                                    <textarea id="revisi-${item.id}" placeholder="Tulis perbaikan..."></textarea>
+                                </div>
+                                <div>
+                                    <select id="lulus-${item.id}">
+                                        <option value="lulus" ${item.kelulusan === 'lulus' ? 'selected' : ''}>Lulus</option>
+                                        <option value="tidak lulus" ${item.kelulusan === 'tidak lulus' ? 'selected' : ''}>Tidak Lulus</option>
+                                    </select>
+                                    <button onclick="kunciNilai(${item.id})">Kunci Nilai</button>
+                                </div>
+                            </td>
+                        </tr>`;
+                    }
+                }
+            });
+
+            if (!bimb) tBimbingan.innerHTML = `<tr><td colspan="5" style="text-align:center; color:gray; padding: 15px;">Tidak ada ajuan kelayakan baru.</td></tr>`;
+            if (!sid) tMenguji.innerHTML = `<tr><td colspan="3" style="text-align:center; color:gray; padding: 15px;">Tidak ada sidang aktif yang perlu dinilai.</td></tr>`;
+        }
+
+        window.simpanAksi = function(id) {
+            let db = JSON.parse(localStorage.getItem('database_ujian')) || [];
+            db = db.map(i => {
+                if (i.id === id) i.statusPersetujuan = document.getElementById(`aksi-${id}`).value;
+                return i;
+            });
+            localStorage.setItem('database_ujian', JSON.stringify(db));
+            alert('Status kelayakan bimbingan diperbarui.');
+            render();
+        };
+
+        window.kunciNilai = function(id) {
+            let db = JSON.parse(localStorage.getItem('database_ujian')) || [];
+            const skor = document.getElementById(`skor-${id}`).value;
+            if (!skor) {
+                alert('Nilai angka wajib diisi!');
+                return;
+            }
+            db = db.map(i => {
+                if (i.id === id) {
+                    i.nilai = skor;
+                    i.kelulusan = document.getElementById(`lulus-${id}`).value;
+                }
+                return i;
+            });
+            localStorage.setItem('database_ujian', JSON.stringify(db));
+            alert('Nilai berhasil disimpan dan dikunci secara permanen.');
+            render();
+        };
+
+        // Panggil fungsi render utama saat halaman dimuat
+        render();
+    </script>
+</body>
+
+</html>
