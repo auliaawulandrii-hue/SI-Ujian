@@ -1,0 +1,32 @@
+.content{
+    margin-left:260px;
+    width:calc(100% - 260px);
+    min-height:100vh;
+    padding:30px;
+    overflow-x:auto;
+}
+
+.card-section{
+    width:100%;
+    overflow:hidden;
+}
+
+.table-responsive{
+    overflow-x:auto;
+}
+
+canvas{
+    max-width:100%;
+}
+
+.table{
+
+white-space:nowrap;
+
+}
+
+.table td{
+
+vertical-align:middle;
+
+}

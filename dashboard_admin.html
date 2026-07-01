@@ -3,244 +3,1431 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Dashboard Admin Prodi - Modul Pelaporan</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Dashboard Admin Prodi</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icon -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
     <style>
-        * {
-            font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
-            box-sizing: border-box;
+        *{
+            font-family:'Poppins',sans-serif;
         }
-        
-         :root {
-            --primary: #0b6623;
-            --accent: #d4af37;
-            --dark: #2c3e50;
-            --bg: #f4f6f9;
+
+        body{
+            background:#f5f7fb;
         }
-        
-        body {
-            margin: 0;
-            display: flex;
-            background: var(--bg);
-            color: var(--dark);
+
+        .sidebar{
+            width:260px;
+            position:fixed;
+            top:0;
+            left:0;
+            bottom:0;
+            background:#14532d;
+            color:white;
+            overflow-y:auto;
         }
-        
-        .sidebar {
-            width: 260px;
-            background: #1e272e;
-            height: 100vh;
-            color: white;
-            position: fixed;
-            padding: 20px 0;
+
+        .logo{
+            text-align:center;
+            padding:25px 15px;
+            border-bottom:1px solid rgba(255,255,255,.15);
         }
-        
-        .sidebar .brand {
-            padding: 0 25px 20px 25px;
-            border-bottom: 1px solid #34495e;
-            font-size: 18px;
-            font-weight: bold;
-            color: var(--accent);
+
+        .logo h4{
+            margin:0;
+            font-weight:700;
         }
-        
-        .sidebar .menu-item {
-            padding: 15px 25px;
-            display: block;
-            color: #dcdde1;
-            text-decoration: none;
-            font-size: 14px;
+
+        .logo small{
+            color:#d1d5db;
         }
-        
-        .sidebar .menu-item.active {
-            background: var(--primary);
-            color: white;
+
+        .menu{
+            padding:15px;
         }
-        
-        .main-content {
-            margin-left: 260px;
-            padding: 40px;
-            width: 100%;
+
+        .menu a{
+            display:block;
+            color:white;
+            text-decoration:none;
+            padding:12px 15px;
+            margin-bottom:8px;
+            border-radius:10px;
+            transition:.3s;
         }
-        
-        .card {
-            background: white;
-            padding: 25px;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
-            margin-bottom: 30px;
-            border-left: 4px solid var(--primary);
+
+        .menu a:hover{
+            background:#22c55e;
+            transform:translateX(5px);
         }
-        
-        .card-title {
-            font-size: 15px;
-            font-weight: bold;
-            margin-bottom: 20px;
-            color: var(--primary);
-            text-transform: uppercase;
+
+        .menu a.active{
+            background:#22c55e;
         }
-        
-        input,
-        select,
-        button {
-            padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            width: 100%;
-            font-size: 14px;
+
+        .content{
+            margin-left:260px;
+            padding:30px;
         }
-        
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 13px;
-            margin-top: 15px;
+
+        .topbar{
+            background:white;
+            border-radius:15px;
+            padding:20px;
+            box-shadow:0 5px 15px rgba(0,0,0,.05);
+            margin-bottom:30px;
         }
-        
-        th,
-        td {
-            padding: 12px;
-            border: 1px solid #dee2e6;
-            text-align: left;
+
+        .card-stat{
+            border:none;
+            border-radius:15px;
+            color:white;
+            transition:.3s;
         }
-        
-        th {
-            background: #f8f9fa;
-            color: #555;
-            font-weight: 600;
+
+        .card-stat:hover{
+            transform:translateY(-5px);
         }
-        
-        .btn {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: bold;
-            text-transform: uppercase;
+
+        .card-stat i{
+            font-size:40px;
+            opacity:.3;
         }
-        
-        .btn-print {
-            background: #27ae60;
-            margin-bottom: 15px;
-            width: auto;
+
+        .bg1{
+            background:linear-gradient(135deg,#16a34a,#22c55e);
         }
-        
-        @media print {
-            .no-print {
-                display: none;
-            }
-            body {
-                background: white;
-            }
-            .sidebar {
-                display: none;
-            }
-            .main-content {
-                margin-left: 0;
-                padding: 0;
-            }
+
+        .bg2{
+            background:linear-gradient(135deg,#2563eb,#3b82f6);
         }
+
+        .bg3{
+            background:linear-gradient(135deg,#f59e0b,#fbbf24);
+        }
+
+        .bg4{
+            background:linear-gradient(135deg,#9333ea,#c084fc);
+        }
+
+        .card-section{
+            background:white;
+            border:none;
+            border-radius:15px;
+            box-shadow:0 5px 15px rgba(0,0,0,.05);
+        }
+
+        .table thead{
+            background:#198754;
+            color:white;
+        }
+
+        .badge-status{
+            font-size:12px;
+            padding:8px 12px;
+        }
+
     </style>
+
 </head>
 
 <body>
 
-    <div class="sidebar no-print">
-        <div class="brand">🎓 Dashboard ADMIN</div>
-        <a href="#" class="menu-item active">Jadwal & Laporan</a>
-        <a href="index.html" class="menu-item" style="margin-top: 50vh; color: #e74c3c;">Keluar</a>
+<!-- ===================== SIDEBAR ====================== -->
+
+<div class="sidebar">
+
+    <div class="logo">
+
+        <h4>
+            <i class="bi bi-mortarboard-fill"></i>
+            Admin Prodi
+        </h4>
+
+        <small>Sistem Informasi Ujian</small>
+
     </div>
 
-    <div class="main-content">
-        <h2 class="no-print" style="color: #1e3c72; margin: 0 0 25px 0;">Panel Pengelolaan Data Administrasi Prodi</h2>
+    <div class="menu">
 
-        <div class="card no-print">
-            <div class="card-title">Distribusi Penjadwalan Otomatis</div>
-            <form id="formJadwal">
-                <label style="display:block; font-size:12px; font-weight:600; margin-bottom:5px;">Pilih Peserta Valid (Telah Disetujui Pembimbing)</label>
-                <select id="pilihMhs" required></select>
+        <a href="#" class="active">
+            <i class="bi bi-speedometer2"></i>
+            Dashboard
+        </a>
 
-                <label style="display:block; font-size:12px; font-weight:600; margin-bottom:5px;">Tanggal & Jam Pelaksanaan Sidang</label>
-                <input type="datetime-local" id="waktuUjian" required>
+        <a href="#">
+            <i class="bi bi-people-fill"></i>
+            Data Mahasiswa
+        </a>
 
-                <button type="submit" class="btn">Terbitkan Jadwal Ujian Resmi</button>
-            </form>
+        <a href="#">
+            <i class="bi bi-person-badge-fill"></i>
+            Data Dosen
+        </a>
+
+        <a href="#">
+            <i class="bi bi-building"></i>
+            Data Ruangan
+        </a>
+
+        <a href="#">
+            <i class="bi bi-file-earmark-check"></i>
+            Verifikasi Berkas
+        </a>
+
+        <a href="#">
+            <i class="bi bi-calendar-event"></i>
+            Penjadwalan
+        </a>
+
+        <a href="#">
+            <i class="bi bi-journal-text"></i>
+            Laporan
+        </a>
+
+        <hr>
+
+        <a href="index.html" class="text-danger">
+            <i class="bi bi-box-arrow-right"></i>
+            Logout
+        </a>
+
+    </div>
+
+</div>
+
+<!-- ===================== CONTENT ====================== -->
+
+<div class="content">
+
+    <!-- TOPBAR -->
+
+    <div class="topbar d-flex justify-content-between align-items-center">
+
+        <div>
+
+            <h3 class="fw-bold mb-1">
+
+                Dashboard Admin Prodi
+
+            </h3>
+
+            <small class="text-secondary">
+
+                Sistem Informasi Pendaftaran Ujian Proposal, Hasil dan Munaqasyah
+
+            </small>
+
         </div>
 
-        <div class="card">
-            <div class="card-title">Dokumen Jurnal Statistik Kelulusan</div>
-            <button class="no-print btn btn-print" onclick="window.print()">Cetak / Ekspor Laporan (PDF)</button>
-            <table>
+        <div>
+
+            <button class="btn btn-success">
+
+                <i class="bi bi-person-circle"></i>
+
+                Admin
+
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- STATISTIK -->
+
+    <div class="row">
+
+        <div class="col-lg-3 mb-4">
+
+            <div class="card card-stat bg1">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between">
+
+                        <div>
+
+                            <h5>Total Mahasiswa</h5>
+
+                            <h2 id="totalMahasiswa">0</h2>
+
+                        </div>
+
+                        <i class="bi bi-people-fill"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-3 mb-4">
+
+            <div class="card card-stat bg2">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between">
+
+                        <div>
+
+                            <h5>Proposal</h5>
+
+                            <h2 id="proposal">0</h2>
+
+                        </div>
+
+                        <i class="bi bi-file-earmark-text"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-3 mb-4">
+
+            <div class="card card-stat bg3">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between">
+
+                        <div>
+
+                            <h5>Ujian Hasil</h5>
+
+                            <h2 id="hasil">0</h2>
+
+                        </div>
+
+                        <i class="bi bi-award"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-3 mb-4">
+
+            <div class="card card-stat bg4">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between">
+
+                        <div>
+
+                            <h5>Munaqasyah</h5>
+
+                            <h2 id="munaqasyah">0</h2>
+
+                        </div>
+
+                        <i class="bi bi-mortarboard"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- STATISTIK BARIS 2 -->
+
+    <div class="row">
+
+        <div class="col-lg-4">
+
+            <div class="card card-section">
+
+                <div class="card-body">
+
+                    <h5>Menunggu Verifikasi</h5>
+
+                    <h1 class="text-warning" id="verifikasi">0</h1>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-4">
+
+            <div class="card card-section">
+
+                <div class="card-body">
+
+                    <h5>Sudah Dijadwalkan</h5>
+
+                    <h1 class="text-success" id="jadwal">0</h1>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-4">
+
+            <div class="card card-section">
+
+                <div class="card-body">
+
+                    <h5>Mahasiswa Lulus</h5>
+
+                    <h1 class="text-primary" id="lulus">0</h1>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <br>
+
+    <!-- Aktivitas Terbaru -->
+     <!-- ============================= -->
+    <!-- QUICK ACTION -->
+    <!-- ============================= -->
+
+    <div class="row mt-4">
+
+        <div class="col-lg-3 mb-3">
+
+            <button class="btn btn-success w-100 p-3">
+
+                <i class="bi bi-file-earmark-check-fill"></i>
+
+                Verifikasi Berkas
+
+            </button>
+
+        </div>
+
+        <div class="col-lg-3 mb-3">
+
+            <button class="btn btn-primary w-100 p-3">
+
+                <i class="bi bi-calendar2-check-fill"></i>
+
+                Jadwalkan Ujian
+
+            </button>
+
+        </div>
+
+        <div class="col-lg-3 mb-3">
+
+            <button class="btn btn-warning w-100 p-3 text-white">
+
+                <i class="bi bi-bar-chart-fill"></i>
+
+                Statistik
+
+            </button>
+
+        </div>
+
+        <div class="col-lg-3 mb-3">
+
+            <button class="btn btn-danger w-100 p-3">
+
+                <i class="bi bi-file-earmark-pdf-fill"></i>
+
+                Export PDF
+
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- ============================= -->
+    <!-- VERIFIKASI BERKAS -->
+    <!-- ============================= -->
+
+    <div class="card card-section mt-4">
+
+    <div class="card-body">
+
+    <h4 class="mb-4">
+
+    <i class="bi bi-folder-check"></i>
+
+    Verifikasi Berkas Mahasiswa
+
+    </h4>
+
+    <div class="table-responsive">
+
+    <table class="table table-bordered table-hover align-middle">
+
+    <thead>
+
+    <tr>
+
+    <th>NIM</th>
+
+    <th>Mahasiswa</th>
+
+    <th>Jenis Ujian</th>
+
+    <th>Dokumen</th>
+
+    <th>Status</th>
+
+    <th width="180">
+
+    Aksi
+
+    </th>
+
+    </tr>
+
+    </thead>
+
+    <tbody id="tabelVerifikasi">
+
+    <tr>
+
+    <td>
+
+    60900124062
+
+    </td>
+
+    <td>
+
+    Aulia Wulandari
+
+    </td>
+
+    <td>
+
+    Proposal
+
+    </td>
+
+    <td>
+
+    <button class="btn btn-secondary btn-sm">
+
+    <i class="bi bi-file-earmark-pdf"></i>
+
+    Lihat PDF
+
+    </button>
+
+    </td>
+
+    <td>
+
+    <span class="badge bg-warning">
+
+    Menunggu
+
+    </span>
+
+    </td>
+
+    <td>
+
+    <button class="btn btn-success btn-sm">
+
+    Setujui
+
+    </button>
+
+    <button class="btn btn-danger btn-sm">
+
+    Tolak
+
+    </button>
+
+    </td>
+
+    </tr>
+
+    </tbody>
+
+    </table>
+
+    </div>
+
+    </div>
+
+    </div>
+
+    <!-- ============================= -->
+    <!-- PENJADWALAN -->
+    <!-- ============================= -->
+
+    <div class="card card-section mt-4">
+
+    <div class="card-body">
+
+    <h4 class="mb-4">
+
+    <i class="bi bi-calendar-event-fill"></i>
+
+    Penjadwalan Ujian
+
+    </h4>
+
+    <div class="row">
+
+    <div class="col-md-6">
+
+    <label>
+
+    Nama Mahasiswa
+
+    </label>
+
+    <input
+    list="listMahasiswa"
+    class="form-control"
+    id="namaMahasiswa"
+    placeholder="Ketik nama mahasiswa...">
+
+    <datalist id="listMahasiswa">
+
+    <option value="Aulia Wulandari">
+
+    <option value="Muhammad Lutfi">
+
+    <option value="Rani Mulyasari">
+
+    <option value="Suci Indah Sari">
+
+    </datalist>
+
+    </div>
+
+    <div class="col-md-6">
+
+    <label>
+
+    Jenis Ujian
+
+    </label>
+
+    <select class="form-select">
+
+    <option>
+
+    Proposal
+
+    </option>
+
+    <option>
+
+    Hasil
+
+    </option>
+
+    <option>
+
+    Munaqasyah
+
+    </option>
+
+    </select>
+
+    </div>
+
+    </div>
+
+    <div class="row mt-3">
+
+    <div class="col-md-4">
+
+    <label>
+
+    Tanggal
+
+    </label>
+
+    <input
+    type="date"
+    class="form-control"
+    id="tanggal">
+
+    </div>
+
+    <div class="col-md-4">
+
+    <label>
+
+    Jam
+
+    </label>
+
+    <input
+    type="time"
+    class="form-control"
+    id="jam">
+
+    </div>
+
+    <div class="col-md-4">
+
+    <label>
+
+    Ruangan
+
+    </label>
+
+    <select
+    class="form-select"
+    id="ruangan">
+
+    <option>
+
+    Ruang Sidang A
+
+    </option>
+
+    <option>
+
+    Ruang Sidang B
+
+    </option>
+
+    <option>
+
+    Ruang Sidang C
+
+    </option>
+
+    </select>
+
+    </div>
+
+    </div>
+
+    <div class="row mt-3">
+
+    <div class="col-md-4">
+
+    <label>
+
+    Ketua Penguji
+
+    </label>
+
+    <select class="form-select">
+
+    <option>
+
+    Nahrun Hartono
+
+    </option>
+
+    <option>
+
+    Dr. Ahmad
+
+    </option>
+
+    </select>
+
+    </div>
+
+    <div class="col-md-4">
+
+    <label>
+
+    Sekretaris
+
+    </label>
+
+    <select class="form-select">
+
+    <option>
+
+    Nurhidayah
+
+    </option>
+
+    <option>
+
+    Rahmat
+
+    </option>
+
+    </select>
+
+    </div>
+
+    <div class="col-md-4">
+
+    <label>
+
+    Anggota
+
+    </label>
+
+    <select class="form-select">
+
+    <option>
+
+    Herman
+
+    </option>
+
+    <option>
+
+    Ridwan
+
+    </option>
+
+    </select>
+
+    </div>
+
+    </div>
+
+    <div class="mt-4">
+
+    <button
+    class="btn btn-success">
+
+    <i class="bi bi-check-circle-fill"></i>
+
+    Simpan Jadwal
+
+    </button>
+
+    <button
+    class="btn btn-outline-primary">
+
+    <i class="bi bi-search"></i>
+
+    Cek Bentrok Jadwal
+
+    </button>
+
+    </div>
+
+    </div>
+
+    </div>
+
+    <div class="card card-section">
+
+        <div class="card-body">
+
+            <h5 class="mb-4">
+
+                <i class="bi bi-clock-history"></i>
+
+                Aktivitas Terbaru
+
+            </h5>
+
+            <table class="table table-hover">
+
                 <thead>
+
                     <tr>
-                        <th>Jenis Ujian</th>
-                        <th>Nama Mahasiswa</th>
-                        <th>Judul Penelitian Tugas Akhir</th>
-                        <th>Agenda Sidang</th>
-                        <th>Nilai</th>
-                        <th>Hasil Keputusan</th>
+
+                        <th>Mahasiswa</th>
+
+                        <th>Jenis</th>
+
+                        <th>Status</th>
+
+                        <th>Tanggal</th>
+
                     </tr>
+
                 </thead>
-                <tbody id="tabelLaporan"></tbody>
+
+                <tbody id="aktivitasTerbaru">
+
+                    <tr>
+
+                        <td colspan="4" class="text-center">
+
+                            Belum ada data
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
             </table>
+
         </div>
+
+    </div>
+    <!-- ===================================================== -->
+    <!-- STATISTIK UJIAN -->
+    <!-- ===================================================== -->
+
+    <div class="card card-section mt-4">
+
+    <div class="card-body">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+    <h4>
+
+    <i class="bi bi-bar-chart-fill"></i>
+
+    Statistik Pendaftaran Ujian
+
+    </h4>
+
+    <select class="form-select w-auto">
+
+    <option>Semester Genap 2025/2026</option>
+    <option>Semester Ganjil 2025/2026</option>
+
+    </select>
+
+    <canvas id="chartStatistik" height="100"></canvas>
+
     </div>
 
-    <script>
-        let db = JSON.parse(localStorage.getItem('database_ujian')) || [];
+    </div>
+    <!-- ===================================================== -->
+    <!-- LAPORAN -->
+    <!-- ===================================================== -->
 
-        function init() {
-            const selectMhs = document.getElementById('pilihMhs');
-            const tbody = document.getElementById('tabelLaporan');
-            selectMhs.innerHTML = '';
-            tbody.innerHTML = '';
+    <div class="card card-section mt-4">
 
-            let adaMhs = false;
+    <div class="card-body">
 
-            db.forEach(item => {
-                if (item.statusPersetujuan === 'setuju' && item.statusVerifikasiAdmin === 'proses') {
-                    adaMhs = true;
-                    const opt = document.createElement('option');
-                    opt.value = item.id;
-                    opt.textContent = `Aulia Wulandari - ${item.jenis}`;
-                    selectMhs.appendChild(opt);
-                }
+    <div class="row mb-3">
 
-                tbody.innerHTML += `
-                <tr>
-                    <td><b>${item.jenis}</b></td>
-                    <td>Aulia Wulandari (60900124062)</td>
-                    <td>${item.judul}</td>
-                    <td><small>${item.jadwal}</small></td>
-                    <td style="text-align:center;"><b>${item.nilai}</b></td>
-                    <td><b style="color:${item.kelulusan === 'PROSES' ? 'orange' : 'green'}">${item.kelulusan.toUpperCase()}</b></td>
-                </tr>`;
-            });
+    <div class="col-md-3">
 
-            if (!adaMhs) selectMhs.innerHTML = '<option value="">Tidak ada berkas tervalidasi yang siap dijadwalkan.</option>';
-        }
+    <input
+    type="text"
+    class="form-control"
+    placeholder="Cari Mahasiswa">
 
-        document.getElementById('formJadwal').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const id = document.getElementById('pilihMhs').value;
-            const waktu = document.getElementById('waktuUjian').value;
-            if (!id) return;
+    </div>
 
-            db = db.map(i => {
-                if (i.id == id) {
-                    i.statusVerifikasiAdmin = 'lengkap';
-                    i.jadwal = `Waktu: ${waktu.replace('T', ' ')} | Tempat: Ruang Sidang FST Utama | Penguji: Nahrun Hartono, M.Kom`;
-                }
-                return i;
-            });
+    <div class="col-md-3">
 
-            localStorage.setItem('database_ujian', JSON.stringify(db));
-            alert('Jadwal resmi berhasil diterbitkan tanpa bentrok struktural!');
-            init();
-        });
+    <select class="form-select">
 
-        init();
-    </script>
+    <option>Semua Jenis</option>
+
+    <option>Proposal</option>
+
+    <option>Hasil</option>
+
+    <option>Munaqasyah</option>
+
+    </select>
+
+    </div>
+
+    <div class="col-md-3">
+
+    <select class="form-select">
+
+    <option>Semua Status</option>
+
+    <option>Lulus</option>
+
+    <option>Lulus Revisi</option>
+
+    <option>Tidak Lulus</option>
+
+    </select>
+
+    </div>
+
+    <div class="col-md-3 text-end">
+
+    <button class="btn btn-success">
+
+    <i class="bi bi-file-earmark-pdf-fill"></i>
+
+    PDF
+
+    </button>
+
+    <button class="btn btn-primary">
+
+    <i class="bi bi-file-earmark-excel-fill"></i>
+
+    Excel
+
+    </button>
+
+    </div>
+
+    </div>
+
+    <div class="table-responsive rounded shadow-sm">
+
+    <table class="table table-hover table-bordered align-middle text-center">
+
+    <thead class="table-success">
+
+    <tr>
+
+    <th>NIM</th>
+
+    <th>Mahasiswa</th>
+
+    <th>Jenis</th>
+
+    <th>Jadwal</th>
+
+    <th>Nilai</th>
+
+    <th>Status</th>
+
+    </tr>
+
+    </thead>
+
+    <tbody id="laporanBody">
+
+    <tr>
+
+    <td>
+
+    60900124062
+
+    </td>
+
+    <td>
+
+    Aulia Wulandari
+
+    </td>
+
+    <td>
+
+    Proposal
+
+    </td>
+
+    <td>
+
+    25 Juli 2026
+
+    </td>
+
+    <td>
+
+    89
+
+    </td>
+
+    <td>
+
+    <span class="badge bg-success">
+
+    Lulus
+
+    </span>
+
+    </td>
+
+    </tr>
+
+    </tbody>
+
+    </table>
+
+    </div>
+
+    </div>
+
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- JavaScript akan kita isi pada bagian selanjutnya -->
+<script>
+new Chart(ctx,{
+
+type:'bar',
+
+data:{
+
+labels:[
+'Proposal',
+'Hasil',
+'Munaqasyah'
+],
+
+datasets:[{
+
+label:'Jumlah Mahasiswa',
+
+data:[15,10,8],
+
+backgroundColor:[
+'#198754',
+'#0d6efd',
+'#ffc107'
+],
+
+borderRadius:10
+
+}]
+
+},
+
+options:{
+
+responsive:true,
+
+maintainAspectRatio:false,
+
+plugins:{
+
+legend:{
+display:false
+}
+
+}
+
+}
+
+});
+let db = JSON.parse(localStorage.getItem("database_ujian")) || [];
+
+function hitungDashboard(){
+
+let proposal=0;
+let hasil=0;
+let munaqasyah=0;
+let verifikasi=0;
+let jadwal=0;
+let lulus=0;
+
+db.forEach(item=>{
+
+    switch(item.jenis){
+
+        case "Proposal":
+            proposal++;
+        break;
+
+        case "Hasil":
+            hasil++;
+        break;
+
+        case "Munaqasyah":
+            munaqasyah++;
+        break;
+
+    }
+
+    if(item.statusVerifikasiAdmin=="proses"){
+
+        verifikasi++;
+
+    }
+
+    if(item.jadwal!=""){
+
+        jadwal++;
+
+    }
+
+    if(item.kelulusan=="lulus"){
+
+        lulus++;
+
+    }
+
+});
+
+document.getElementById("totalMahasiswa").innerHTML=db.length;
+
+document.getElementById("proposal").innerHTML=proposal;
+
+document.getElementById("hasil").innerHTML=hasil;
+
+document.getElementById("munaqasyah").innerHTML=munaqasyah;
+
+document.getElementById("verifikasi").innerHTML=verifikasi;
+
+document.getElementById("jadwal").innerHTML=jadwal;
+
+document.getElementById("lulus").innerHTML=lulus;
+
+}
+
+</script>
+<script>
+
+function loadAktivitas(){
+
+const tbody=document.getElementById("aktivitasTerbaru");
+
+tbody.innerHTML="";
+
+if(db.length==0){
+
+tbody.innerHTML=`
+<tr>
+<td colspan="4" class="text-center">
+
+Belum ada aktivitas
+
+</td>
+</tr>
+`;
+
+return;
+
+}
+
+db.slice().reverse().forEach(item=>{
+
+tbody.innerHTML+=`
+
+<tr>
+
+<td>
+
+${item.nama}
+
+</td>
+
+<td>
+
+${item.jenis}
+
+</td>
+
+<td>
+
+<span class="badge bg-success">
+
+${item.statusPersetujuan}
+
+</span>
+
+</td>
+
+<td>
+
+${item.tanggal}
+
+</td>
+
+</tr>
+
+`;
+
+});
+
+}
+
+</script>
+<script>
+
+function loadMahasiswa(){
+
+const list=document.getElementById("listMahasiswa");
+
+list.innerHTML="";
+
+db.forEach(item=>{
+
+if(item.statusPersetujuan=="setuju"){
+
+list.innerHTML+=`
+
+<option value="${item.nama}">
+
+`;
+
+}
+
+});
+
+}
+
+</script>
+<script>
+
+function cekBentrok(tanggal,jam,ruangan){
+
+let bentrok=false;
+
+db.forEach(item=>{
+
+if(
+
+item.tanggal==tanggal
+
+&&
+
+item.jam==jam
+
+&&
+
+item.ruangan==ruangan
+
+){
+
+bentrok=true;
+
+}
+
+});
+
+return bentrok;
+
+}
+
+</script>
+<script>
+
+function simpanJadwal(){
+
+const id=document.getElementById("pilihMahasiswa").value;
+
+const tanggal=document.getElementById("tanggal").value;
+
+const jam=document.getElementById("jam").value;
+
+const ruangan=document.getElementById("ruangan").value;
+
+if(cekBentrok(tanggal,jam,ruangan)){
+
+alert("Ruangan sudah dipakai pada jam tersebut.");
+
+return;
+
+}
+
+db=db.map(item=>{
+
+if(item.id==id){
+
+item.tanggal=tanggal;
+
+item.jam=jam;
+
+item.ruangan=ruangan;
+
+item.jadwal=tanggal+" "+jam;
+
+}
+
+return item;
+
+});
+
+localStorage.setItem(
+
+"database_ujian",
+
+JSON.stringify(db)
+
+);
+
+tampilToast("Jadwal berhasil disimpan.");
+
+hitungDashboard();
+
+loadAktivitas();
+
+}
+
+</script>
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+
+<div
+id="liveToast"
+class="toast">
+
+<div class="toast-header">
+
+<strong class="me-auto">
+
+Sistem
+
+</strong>
+
+<button
+type="button"
+class="btn-close"
+data-bs-dismiss="toast">
+
+</button>
+
+</div>
+
+<div
+class="toast-body"
+id="pesanToast">
+
+</div>
+
+</div>
+
+</div>
+<script>
+
+function tampilToast(pesan){
+
+document.getElementById("pesanToast").innerHTML=pesan;
+
+const toast=new bootstrap.Toast(
+
+document.getElementById("liveToast")
+
+);
+
+toast.show();
+
+}
+
+</script>
+<script>
+
+loadMahasiswa();
+
+loadAktivitas();
+
+hitungDashboard();
+
+</script>
 </body>
-
 </html>
