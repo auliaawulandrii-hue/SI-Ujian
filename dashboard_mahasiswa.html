@@ -276,7 +276,7 @@
         <div class="topbar d-flex justify-content-between align-items-center">
             <div>
                 <h3 class="fw-bold mb-1" id="topbarHeaderTitle">Dashboard Utama</h3>
-                <small class="text-secondary">Selamat Datang Kembali, <b id="lblSapaan">Aulia Wulandari</b> — NIM: 60900124062</small>
+                <small class="text-secondary">Selamat Datang Kembali, <b id="lblSapaan">Aulia Wulandari</b> — NIM: <span id="lblNim">60900124062</span></small>
             </div>
             <div>
                 <button class="btn btn-success px-3" style="background-color: #14532d; border: none;">
@@ -382,11 +382,11 @@
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">No HP / WhatsApp</label>
-                                <input type="text" class="form-control" id="hpMhs" value="082312345678" required>
+                                <input type="text" class="form-control" id="hpMhs" value="082191249546" required>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Dosen Pembimbing Akademik (Dosen PA)</label>
-                                <input type="text" class="form-control" id="paMhs" value="Dosen PA Informatika, M.T." required>
+                                <input type="text" class="form-control" id="paMhs" value="Izmy S.Kom M.Cs" required>
                             </div>
                         </div>
 
@@ -506,10 +506,53 @@
          JAVASCRIPT LOGIC CENTER (SINKRON & AMAN)
          ========================================== -->
     <script>
-        if (!localStorage.getItem('database_ujian_reset_done')) {
-            localStorage.setItem('database_ujian', JSON.stringify([]));
-            localStorage.setItem('database_ujian_reset_done', 'true');
-        }
+        // MENDAPATKAN DATA LOGIN AKTIF DARI SESSION LOCALSTORAGE
+        const nimSesi = localStorage.getItem('nim_aktif_login') || "60900124062";
+        const namaSesi = localStorage.getItem('nama_aktif_login') || "Aulia Wulandari";
+
+        // Sinkronisasi data identitas ke tampilan teks dan input formulir
+        document.getElementById('namaMhs').value = namaSesi;
+        document.getElementById('nimMhs').value = nimSesi;
+        document.getElementById('lblSapaan').innerText = namaSesi;
+        document.getElementById('lblNim').innerText = nimSesi;
+
+        // KODE BARU: Langsung bersihkan memori lama khusus NIM Anda agar tidak menumpuk duplikat
+        const databaseBersihAulia = [{
+            id: 101,
+            nim: "60900124062",
+            nama: "Aulia Wulandari",
+            jenis: "Proposal",
+            judul: "sistem informasi manajemen",
+            berkas: "proposal_aulia.pdf",
+            statusPersetujuan: "setuju",
+            statusVerifikasiAdmin: "setuju",
+            jadwal: "Ujian selesai dilaksanakan",
+            nilai: "-",
+            kelulusan: "lulus"
+        }, {
+            id: 102,
+            nim: "60900124062",
+            nama: "Aulia Wulandari",
+            jenis: "Hasil",
+            judul: "sistem informasi manajemen",
+            berkas: "naskah_hasil_aulia.pdf",
+            statusPersetujuan: "proses",
+            statusVerifikasiAdmin: "proses",
+            jadwal: "Menunggu Verifikasi Berkas",
+            nilai: "-",
+            kelulusan: "PROSES"
+        }];
+
+        // Ambil data mahasiswa lain jika ada, buang data Aulia yang lama agar tidak double
+        let currentDB = JSON.parse(localStorage.getItem('database_ujian')) || [];
+        let dbTanpaAuliaLama = currentDB.filter(item => item.nim !== "60900124062");
+
+        // Satukan data bersih
+        let finalDatabase = [...dbTanpaAuliaLama, ...databaseBersihAulia];
+        localStorage.setItem('database_ujian', JSON.stringify(finalDatabase));
+
+        // Jalankan fungsi render utama
+        renderDashboardMetrics();
 
         function switchTab(target) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
@@ -690,9 +733,10 @@
         function renderDashboardMetrics() {
             const db = JSON.parse(localStorage.getItem('database_ujian')) || [];
 
-            const prop = db.find(i => i.jenis === 'Proposal');
-            const hasil = db.find(i => i.jenis === 'Hasil');
-            const muna = db.find(i => i.jenis === 'Munaqasyah');
+            // FILTER DATA BERDASARKAN NIM MAHASISWA YANG SEDANG LOGIN AKTIF
+            const prop = db.find(i => i.jenis === 'Proposal' && i.nim === nimSesi);
+            const hasil = db.find(i => i.jenis === 'Hasil' && i.nim === nimSesi);
+            const muna = db.find(i => i.jenis === 'Munaqasyah' && i.nim === nimSesi);
 
             document.getElementById('step1').className = 'step-item';
             document.getElementById('step2').className = 'step-item';
@@ -751,11 +795,10 @@
 
         function validasiAlurUjian() {
             const db = JSON.parse(localStorage.getItem('database_ujian')) || [];
-            const infoBox = document.getElementById('statusAlurBox');
-            const optHasil = document.getElementById('optHasil');
 
-            const statusProp = db.find(i => i.jenis === 'Proposal');
-            const statusHasil = db.find(i => i.jenis === 'Hasil');
+            // FILTER KELAYAKAN BERDASARKAN MAHASISWA YANG SEDANG LOGIN AKTIF
+            const statusProp = db.find(i => i.jenis === 'Proposal' && i.nim === nimSesi);
+            const statusHasil = db.find(i => i.jenis === 'Hasil' && i.nim === nimSesi);
 
             const lulusProp = statusProp && statusProp.kelulusan === 'lulus';
             const lulusHasil = statusHasil && statusHasil.kelulusan === 'lulus';
@@ -805,7 +848,7 @@
             const nim = document.getElementById('nimMhs').value;
 
             let db = JSON.parse(localStorage.getItem('database_ujian')) || [];
-            const idx = db.findIndex(i => i.jenis === jenis && i.kelulusan === 'tidak lulus');
+            const idx = db.findIndex(i => i.jenis === jenis && i.nim === nim && i.kelulusan === 'tidak lulus');
 
             if (idx !== -1) {
                 db[idx].judul = judul;
