@@ -4,17 +4,21 @@
 <head>
     <meta charset="UTF-8">
     <title>Dashboard Dosen - Panel Evaluasi</title>
+    <!-- Menggunakan font Google Fonts agar serupa dengan dashboard mahasiswa -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
-            font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
+            font-family: 'Plus Jakarta Sans', 'Segoe UI', sans-serif;
             box-sizing: border-box;
         }
         
-         :root {
-            --primary: #0b6623;
-            --accent: #d4af37;
-            --dark: #2c3e50;
-            --bg: #f4f6f9;
+        :root {
+            --primary: #008744; /* Hijau segar sesuai tombol & aksen mhs */
+            --primary-light: #e6f4ea;
+            --dark: #1a1a1a;
+            --bg: #f3f4f9; /* Background abu-abu keunguan lembut */
+            --sidebar-bg: #094a25; /* Hijau tua pekat khas kampus */
+            --text-muted: #64748b;
         }
         
         body {
@@ -22,59 +26,95 @@
             display: flex;
             background: var(--bg);
             color: var(--dark);
+            -webkit-font-smoothing: antialiased;
         }
         
         .sidebar {
             width: 260px;
-            background: #1e272e;
+            background: var(--sidebar-bg);
             height: 100vh;
             color: white;
             position: fixed;
-            padding: 20px 0;
+            padding: 24px 0;
+            box-shadow: 4px 0 15px rgba(0,0,0,0.05);
         }
         
         .sidebar .brand {
-            padding: 0 25px 20px 25px;
-            border-bottom: 1px solid #34495e;
-            font-size: 18px;
-            font-weight: bold;
-            color: var(--accent);
+            padding: 0 24px 24px 24px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
         
+        .sidebar .menu-section-label {
+            padding: 20px 24px 6px 24px;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.4);
+            letter-spacing: 1px;
+        }
+
         .sidebar .menu-item {
-            padding: 15px 25px;
+            padding: 12px 24px;
             display: block;
-            color: #dcdde1;
+            color: rgba(255, 255, 255, 0.75);
             text-decoration: none;
             font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
         }
         
         .sidebar .menu-item.active {
-            background: var(--primary);
+            background: #10b981; /* Warna hijau menyala indikator aktif mhs */
+            color: white;
+            font-weight: 600;
+            border-top-right-radius: 12px;
+            border-bottom-right-radius: 12px;
+            margin-right: 15px;
+        }
+
+        .sidebar .menu-item:hover:not(.active) {
+            background: rgba(255,255,255,0.05);
             color: white;
         }
         
         .main-content {
             margin-left: 260px;
             padding: 40px;
-            width: 100%;
+            width: calc(100% - 260px);
         }
         
+        .welcome-card {
+            background: white;
+            padding: 24px;
+            border-radius: 16px;
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.02);
+            margin-bottom: 24px;
+            border: 1px solid rgba(0,0,0,0.03);
+        }
+
         .card {
             background: white;
-            padding: 25px;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
-            margin-bottom: 30px;
-            border-left: 4px solid var(--primary);
+            padding: 28px;
+            border-radius: 16px;
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.02);
+            margin-bottom: 24px;
+            border: 1px solid rgba(0,0,0,0.03);
         }
         
         .card-title {
             font-size: 15px;
-            font-weight: bold;
-            margin-bottom: 20px;
-            color: var(--primary);
-            text-transform: uppercase;
+            font-weight: 700;
+            margin-bottom: 22px;
+            color: #1e293b;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
         
         table {
@@ -83,31 +123,40 @@
             font-size: 14px;
         }
         
-        th,
-        td {
-            padding: 12px;
+        th, td {
+            padding: 14px 16px;
             text-align: left;
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid #f1f5f9;
+            vertical-align: top;
         }
         
         th {
-            background: #f8f9fa;
-            color: #555;
+            background: #f8fafc;
+            color: #475569;
+            font-weight: 600;
+            font-size: 13px;
         }
         
-        select,
-        input,
-        button,
-        textarea {
-            padding: 8px;
-            border-radius: 4px;
-            border: 1px solid #ddd;
-            font-size: 14px;
+        select, input, textarea {
+            padding: 9px 12px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            font-size: 13px;
+            background: #f8fafc;
+            color: #334155;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        select:focus, input:focus, textarea:focus {
+            border-color: var(--primary);
+            background: white;
+            box-shadow: 0 0 0 3px rgba(0, 135, 68, 0.15);
         }
         
         textarea {
             width: 100%;
-            height: 50px;
+            height: 60px;
             resize: vertical;
         }
         
@@ -115,10 +164,89 @@
             background: var(--primary);
             color: white;
             cursor: pointer;
-            font-weight: bold;
+            font-weight: 600;
             border: none;
-            text-transform: uppercase;
+            padding: 9px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            transition: all 0.2s;
+        }
+
+        button:hover {
+            background: #007038;
+            box-shadow: 0 4px 12px rgba(0, 135, 68, 0.2);
+        }
+
+        .btn-lock {
+            background: #059669;
+        }
+        .btn-lock:hover {
+            background: #047857;
+        }
+
+        /* Radio Pill Style mirip tombol mhs */
+        .role-selector {
+            display: flex;
+            gap: 12px;
+        }
+
+        .role-option {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 20px;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            background: #f8fafc;
+            transition: all 0.2s;
+        }
+
+        .role-option:hover {
+            background: #f1f5f9;
+        }
+
+        .role-option input[type="radio"] {
+            accent-color: var(--primary);
+            margin: 0;
+            width: 16px;
+            height: 16px;
+        }
+
+        .role-option.selected {
+            border-color: var(--primary);
+            background: var(--primary-light);
+            color: var(--sidebar-bg);
+        }
+
+        .eval-box {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .eval-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .eval-label {
             font-size: 12px;
+            font-weight: 600;
+            color: #475569;
+            margin-bottom: 2px;
+            display: block;
+        }
+
+        .badge-sub {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 4px;
+            display: block;
         }
     </style>
 </head>
@@ -126,145 +254,339 @@
 <body>
 
     <div class="sidebar">
-        <div class="brand">🎓 DASHBOARD DOSEN</div>
+        <div class="brand">🎓 SI_TUGAS AKHIR<br><span style="font-size: 10px; font-weight: 400; opacity: 0.7;">UIN Alauddin Makassar</span></div>
+        
+        <div class="menu-section-label">Menu Utama</div>
         <a href="#" class="menu-item active">Evaluasi & Nilai</a>
-        <a href="index.html" class="menu-item" style="margin-top: 50vh; color: #e74c3c;">Keluar</a>
+        
+        <a href="index.html" class="menu-item" style="margin-top: 55vh; color: #f87171; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px;">🚪 Keluar Sistem</a>
     </div>
 
     <div class="main-content">
-        <h2 style="color: #1e3c72; margin: 0 0 10px 0;">Portal Dosen Pembimbing & Penguji</h2>
-        <p style="color: #6c757d; margin-bottom: 30px;">Gunakan panel di bawah ini untuk memproses kelayakan berkas dan penilaian ujian mahasiswa bimbingan Anda.</p>
-
-        <div class="card">
-            <div class="card-title">Lembar Persetujuan Kelayakan Bimbingan</div>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Mahasiswa</th>
-                        <th>Ujian</th>
-                        <th>Judul Penelitian</th>
-                        <th>Lampiran</th>
-                        <th>Keputusan</th>
-                    </tr>
-                </thead>
-                <tbody id="tabelBimbingan"></tbody>
-            </table>
+        <div class="welcome-card">
+            <h2 style="color: #1e293b; margin: 0 0 6px 0; font-size: 22px; font-weight: 700;">Portal Evaluasi Dosen</h2>
+            <p style="color: var(--text-muted); margin: 0; font-size: 14px;">Selamat datang kembali di sistem akademik Tugas Akhir mahasiswa bimbingan & pengujian Anda.</p>
         </div>
 
         <div class="card">
-            <div class="card-title">Input Nilai & Keputusan Kelulusan Akhir</div>
-            <table>
-                <thead>
-                    <tr>
-                        <th style="width: 25%;">Agenda Sidang</th>
-                        <th style="width: 40%;">Informasi Penelitian</th>
-                        <th style="width: 35%;">Input Lembar Evaluasi</th>
-                    </tr>
-                </thead>
-                <tbody id="tabelMenguji"></tbody>
-            </table>
+            <div class="card-title">🛠️ Pilih Peran Akses</div>
+            <div class="role-selector">
+                <label class="role-option selected" id="lbl-pembimbing">
+                    <input type="radio" name="peranDosen" value="pembimbing" checked onchange="handleRoleChange(this.value)"> 
+                    <span>Dosen Pembimbing (ACC Berkas)</span>
+                </label>
+                <label class="role-option" id="lbl-penguji">
+                    <input type="radio" name="peranDosen" value="penguji" onchange="handleRoleChange(this.value)"> 
+                    <span>Dosen Penguji (Penilaian Sidang)</span>
+                </label>
+            </div>
+        </div>
+
+        <!-- SECTION DOSEN PEMBIMBING -->
+        <div id="sectionPembimbing">
+            <div class="card">
+                <div class="card-title" style="color: #0d9488;">📋 Lembar Persetujuan Kelayakan Berkas</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 18%;">Mahasiswa</th>
+                            <th style="width: 16%;">Tahapan Ujian</th>
+                            <th style="width: 24%;">Judul Penelitian</th>
+                            <th style="width: 14%;">Lampiran</th>
+                            <th style="width: 20%;">Komentar Pembimbing</th>
+                            <th style="width: 18%;">Keputusan</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabelBimbingan"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- SECTION DOSEN PENGUJI -->
+        <div id="sectionPenguji" style="display: none;">
+            <div class="card">
+                <div class="card-title" style="color: #0d9488;">📝 Evaluasi Tim Penguji 1</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 25%;">Agenda Sidang</th>
+                            <th style="width: 40%;">Informasi Penelitian</th>
+                            <th style="width: 35%;">Input Lembar Evaluasi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabelMenguji1"></tbody>
+                </table>
+            </div>
+
+            <div class="card">
+                <div class="card-title" style="color: #0d9488;">📝 Evaluasi Tim Penguji 2</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 25%;">Agenda Sidang</th>
+                            <th style="width: 40%;">Informasi Penelitian</th>
+                            <th style="width: 35%;">Input Lembar Evaluasi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabelMenguji2"></tbody>
+                </table>
+            </div>
         </div>
     </div>
 
     <script>
-        // Membaca data yang diisi oleh dashboard mahasiswa
+        // Data Dummy Otomatis
+        function inisialisasiDataDummy() {
+            const cekData = localStorage.getItem('database_ujian');
+            if (!cekData || JSON.parse(cekData).length === 0) {
+                const dataDummy = [
+                    {
+                        id: 1,
+                        jenis: "Seminar Proposal (Sempro)",
+                        judul: "Analisis Sentimen Pengguna Aplikasi wondr by BNI Menggunakan Metode Naive Bayes",
+                        statusPersetujuan: "proses",
+                        statusVerifikasiAdmin: "lengkap",
+                        jadwal: "Senin, 6 Juli 2026 - 09:00 WITA",
+                        berkas: "proposal_risty.pdf",
+                        komentarPembimbing: "",
+                        nilaiPenguji1: "-",
+                        nilaiPenguji2: "-",
+                        kelulusanPenguji1: "lulus",
+                        kelulusanPenguji2: "lulus",
+                        catatanPenguji1: "",
+                        catatanPenguji2: ""
+                    },
+                    {
+                        id: 2,
+                        jenis: "Ujian Hasil",
+                        judul: "Perancangan Data Warehouse Penjualan E-Commerce Berbasis PostgreSQL Menggunakan Star Schema",
+                        statusPersetujuan: "setuju",
+                        statusVerifikasiAdmin: "lengkap",
+                        jadwal: "Kamis, 9 Juli 2026 - 11:00 WITA",
+                        berkas: "skripsi_hasil_risty.pdf",
+                        komentarPembimbing: "",
+                        nilaiPenguji1: "-",
+                        nilaiPenguji2: "-",
+                        kelulusanPenguji1: "lulus",
+                        kelulusanPenguji2: "lulus",
+                        catatanPenguji1: "",
+                        catatanPenguji2: ""
+                    }
+                ];
+                localStorage.setItem('database_ujian', JSON.stringify(dataDummy));
+            }
+        }
+
+        inisialisasiDataDummy();
+
+        // Mengatur status aktif tombol radio dan pemicu render ulang data
+        function handleRoleChange(role) {
+            document.getElementById('lbl-pembimbing').classList.toggle('selected', role === 'pembimbing');
+            document.getElementById('lbl-penguji').classList.toggle('selected', role === 'penguji');
+            
+            document.getElementById('sectionPembimbing').style.display = role === 'pembimbing' ? 'block' : 'none';
+            document.getElementById('sectionPenguji').style.display = role === 'penguji' ? 'block' : 'none';
+            
+            // PENTING: Panggil render() agar data ter-refresh sesuai bagian yang dibuka
+            render(); 
+        }
+
         function render() {
             const db = JSON.parse(localStorage.getItem('database_ujian')) || [];
             const tBimbingan = document.getElementById('tabelBimbingan');
-            const tMenguji = document.getElementById('tabelMenguji');
+            const tMenguji1 = document.getElementById('tabelMenguji1');
+            const tMenguji2 = document.getElementById('tabelMenguji2');
 
             tBimbingan.innerHTML = '';
-            tMenguji.innerHTML = '';
+            tMenguji1.innerHTML = '';
+            tMenguji2.innerHTML = '';
 
             let bimb = false;
             let sid = false;
 
             db.forEach(item => {
-                // Tampilkan untuk Proses 3.0 jika status persetujuan adalah 'proses'
+                // 1. Render Tabel Kelayakan Bimbingan
                 if (item.statusPersetujuan === 'proses') {
                     bimb = true;
                     tBimbingan.innerHTML += `
                     <tr>
-                        <td>Aulia Wulandari (60900124062)</td>
-                        <td><b>${item.jenis}</b></td>
-                        <td>${item.judul}</td>
-                        <td><a href="#" style="color:var(--primary); font-weight:600; text-decoration:none;">📄 ${item.berkas}</a></td>
+                        <td><span style="font-weight:600; color:#1e293b;">Aulia Wulandari</span><br><small style="color:var(--text-muted);">NIM: 60900124062</small></td>
+                        <td><span style="background:#f1f5f9; padding:4px 8px; border-radius:6px; font-weight:600; font-size:12px; color:#334155;">${item.jenis}</span></td>
+                        <td style="color:#334155; line-height:1.5;">${item.judul}</td>
                         <td>
-                            <select id="aksi-${item.id}">
-                                <option value="setuju">Setuju (Layak)</option>
-                                <option value="revisi">Revisi</option>
-                            </select>
-                            <button onclick="simpanAksi(${item.id})">Simpan</button>
+                            ${item.berkas ? `<span style="color:var(--primary); font-weight:600;">📄 ${item.berkas}</span>` : `<span style="font-size: 13px; color: #475569;">Belum ada lampiran berkas</span>`}
+                        </td>
+                        <td>
+                            <textarea id="komentarPembimbing-${item.id}" placeholder="Masukkan koreksi / komentar..." style="width:100%; min-height:70px; padding: 10px; border-radius: 10px; border: 1px solid #d1d5db;">${item.komentarPembimbing || ''}</textarea>
+                        </td>
+                        <td>
+                            <div style="display: flex; flex-direction: column; gap: 8px;">
+                                <select id="aksi-${item.id}" style="padding: 7px;">
+                                    <option value="setuju" ${item.statusPersetujuan === 'setuju' ? 'selected' : ''}>ACC Layak</option>
+                                    <option value="revisi" ${item.statusPersetujuan === 'revisi' ? 'selected' : ''}>Revisi</option>
+                                </select>
+                                <button onclick="simpanAksi(${item.id})">Kirim</button>
+                            </div>
                         </td>
                     </tr>`;
                 }
 
-                // Tampilkan untuk Proses 5.0 jika sudah dijadwalkan oleh admin
-                // Menyaring agar data ujian hasil (nilai '7') atau data baru (nilai '-') bisa diinput nilai barunya
+                // 2. Render Tabel Evaluasi Penguji
                 if (item.statusVerifikasiAdmin === 'lengkap') {
-                    if (item.nilai === '-' || item.nilai === '7') {
-                        sid = true;
-                        tMenguji.innerHTML += `
-                        <tr>
-                            <td><b>${item.jenis}</b><br><small style="color:gray;">${item.jadwal}</small></td>
-                            <td><i>${item.judul}</i></td>
-                            <td>
-                                <div style="margin-bottom:8px;">
-                                    <label style="font-size:12px; font-weight:600;">Nilai (0-100):</label> 
-                                    <input type="number" id="skor-${item.id}" value="${item.nilai !== '-' ? item.nilai : ''}" style="width:70px;" min="0" max="100" required>
+                    sid = true;
+                    
+                    const jenisUjian = item.jenis.toLowerCase();
+                    const isSempro = jenisUjian.includes('sempro') || jenisUjian.includes('proposal');
+                    const nilaiPenguji1 = item.nilaiPenguji1 !== '-' ? item.nilaiPenguji1 : '';
+                    const nilaiPenguji2 = item.nilaiPenguji2 !== '-' ? item.nilaiPenguji2 : '';
+
+                    let inputEvaluasiHTML1 = '';
+                    let inputEvaluasiHTML2 = '';
+
+                    if (isSempro) {
+                        inputEvaluasiHTML1 = `
+                            <div class="eval-box">
+                                <div>
+                                    <span class="eval-label">Catatan Perbaikan Proposal:</span>
+                                    <textarea id="catatan-penguji1-${item.id}" placeholder="Masukkan poin-poin revisi...">${item.catatanPenguji1 || ''}</textarea>
                                 </div>
-                                <div style="margin-bottom:8px;">
-                                    <label style="font-size:12px; font-weight:600;">Catatan Revisi:</label>
-                                    <textarea id="revisi-${item.id}" placeholder="Tulis perbaikan..."></textarea>
+                                <div class="eval-row">
+                                    <select id="lulus-penguji1-${item.id}" style="min-width: 110px;">
+                                        <option value="lulus" ${item.kelulusanPenguji1 === 'lulus' ? 'selected' : ''}>Lulus</option>
+                                        <option value="tidak lulus" ${item.kelulusanPenguji1 === 'tidak lulus' ? 'selected' : ''}>Tidak Lulus</option>
+                                    </select>
+                                    <button class="btn-lock" onclick="kunciNilai(${item.id}, 'penguji1', true)">Kunci Hasil</button>
+                                </div>
+                            </div>
+                        `;
+                        inputEvaluasiHTML2 = `
+                            <div class="eval-box">
+                                <div>
+                                    <span class="eval-label">Catatan Perbaikan Proposal:</span>
+                                    <textarea id="catatan-penguji2-${item.id}" placeholder="Masukkan poin-poin revisi...">${item.catatanPenguji2 || ''}</textarea>
+                                </div>
+                                <div class="eval-row">
+                                    <select id="lulus-penguji2-${item.id}" style="min-width: 110px;">
+                                        <option value="lulus" ${item.kelulusanPenguji2 === 'lulus' ? 'selected' : ''}>Lulus</option>
+                                        <option value="tidak lulus" ${item.kelulusanPenguji2 === 'tidak lulus' ? 'selected' : ''}>Tidak Lulus</option>
+                                    </select>
+                                    <button class="btn-lock" onclick="kunciNilai(${item.id}, 'penguji2', true)">Kunci Hasil</button>
+                                </div>
+                            </div>
+                        `;
+                    } else {
+                        inputEvaluasiHTML1 = `
+                            <div class="eval-box">
+                                <div class="eval-row">
+                                    <span class="eval-label" style="min-width: 90px;">Nilai Ujian:</span>
+                                    <input type="number" id="skor-penguji1-${item.id}" value="${nilaiPenguji1}" style="width: 80px;" min="0" max="100" placeholder="0-100" required>
                                 </div>
                                 <div>
-                                    <select id="lulus-${item.id}">
-                                        <option value="lulus" ${item.kelulusan === 'lulus' ? 'selected' : ''}>Lulus</option>
-                                        <option value="tidak lulus" ${item.kelulusan === 'tidak lulus' ? 'selected' : ''}>Tidak Lulus</option>
-                                    </select>
-                                    <button onclick="kunciNilai(${item.id})">Kunci Nilai</button>
+                                    <span class="eval-label">Catatan Revisi Sidang:</span>
+                                    <textarea id="catatan-penguji1-${item.id}" placeholder="Masukkan detail revisi...">${item.catatanPenguji1 || ''}</textarea>
                                 </div>
-                            </td>
-                        </tr>`;
+                                <div class="eval-row">
+                                    <select id="lulus-penguji1-${item.id}" style="min-width: 110px;">
+                                        <option value="lulus" ${item.kelulusanPenguji1 === 'lulus' ? 'selected' : ''}>Lulus</option>
+                                        <option value="tidak lulus" ${item.kelulusanPenguji1 === 'tidak lulus' ? 'selected' : ''}>Tidak Lulus</option>
+                                    </select>
+                                    <button class="btn-lock" onclick="kunciNilai(${item.id}, 'penguji1', false)">Kunci Nilai</button>
+                                </div>
+                            </div>
+                        `;
+                        inputEvaluasiHTML2 = `
+                            <div class="eval-box">
+                                <div class="eval-row">
+                                    <span class="eval-label" style="min-width: 90px;">Nilai Ujian:</span>
+                                    <input type="number" id="skor-penguji2-${item.id}" value="${nilaiPenguji2}" style="width: 80px;" min="0" max="100" placeholder="0-100" required>
+                                </div>
+                                <div>
+                                    <span class="eval-label">Catatan Revisi Sidang:</span>
+                                    <textarea id="catatan-penguji2-${item.id}" placeholder="Masukkan detail revisi...">${item.catatanPenguji2 || ''}</textarea>
+                                </div>
+                                <div class="eval-row">
+                                    <select id="lulus-penguji2-${item.id}" style="min-width: 110px;">
+                                        <option value="lulus" ${item.kelulusanPenguji2 === 'lulus' ? 'selected' : ''}>Lulus</option>
+                                        <option value="tidak lulus" ${item.kelulusanPenguji2 === 'tidak lulus' ? 'selected' : ''}>Tidak Lulus</option>
+                                    </select>
+                                    <button class="btn-lock" onclick="kunciNilai(${item.id}, 'penguji2', false)">Kunci Nilai</button>
+                                </div>
+                            </div>
+                        `;
                     }
+
+                    tMenguji1.innerHTML += `
+                    <tr>
+                        <td><span style="font-weight:700; color:#1e293b;">${item.jenis}</span><br><span class="badge-sub">📅 ${item.jadwal}</span></td>
+                        <td style="color:#334155; line-height:1.5;"><i>${item.judul}</i></td>
+                        <td>${inputEvaluasiHTML1}</td>
+                    </tr>`;
+
+                    tMenguji2.innerHTML += `
+                    <tr>
+                        <td><span style="font-weight:700; color:#1e293b;">${item.jenis}</span><br><span class="badge-sub">📅 ${item.jadwal}</span></td>
+                        <td style="color:#334155; line-height:1.5;"><i>${item.judul}</i></td>
+                        <td>${inputEvaluasiHTML2}</td>
+                    </tr>`;
                 }
             });
 
-            if (!bimb) tBimbingan.innerHTML = `<tr><td colspan="5" style="text-align:center; color:gray; padding: 15px;">Tidak ada ajuan kelayakan baru.</td></tr>`;
-            if (!sid) tMenguji.innerHTML = `<tr><td colspan="3" style="text-align:center; color:gray; padding: 15px;">Tidak ada sidang aktif yang perlu dinilai.</td></tr>`;
+            if (!bimb) tBimbingan.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--text-muted); padding: 20px;">Tidak ada ajuan kelayakan baru.</td></tr>`;
+            if (!sid) {
+                tMenguji1.innerHTML = `<tr><td colspan="3" style="text-align:center; color:var(--text-muted); padding: 20px;">Tidak ada sidang aktif yang perlu dinilai.</td></tr>`;
+                tMenguji2.innerHTML = `<tr><td colspan="3" style="text-align:center; color:var(--text-muted); padding: 20px;">Tidak ada sidang aktif yang perlu dinilai.</td></tr>`;
+            }
         }
 
         window.simpanAksi = function(id) {
             let db = JSON.parse(localStorage.getItem('database_ujian')) || [];
-            db = db.map(i => {
-                if (i.id === id) i.statusPersetujuan = document.getElementById(`aksi-${id}`).value;
-                return i;
-            });
-            localStorage.setItem('database_ujian', JSON.stringify(db));
-            alert('Status kelayakan bimbingan diperbarui.');
-            render();
-        };
-
-        window.kunciNilai = function(id) {
-            let db = JSON.parse(localStorage.getItem('database_ujian')) || [];
-            const skor = document.getElementById(`skor-${id}`).value;
-            if (!skor) {
-                alert('Nilai angka wajib diisi!');
-                return;
-            }
+            const komentar = document.getElementById(`komentarPembimbing-${id}`).value;
             db = db.map(i => {
                 if (i.id === id) {
-                    i.nilai = skor;
-                    i.kelulusan = document.getElementById(`lulus-${id}`).value;
+                    i.statusPersetujuan = document.getElementById(`aksi-${id}`).value;
+                    i.komentarPembimbing = komentar;
                 }
                 return i;
             });
             localStorage.setItem('database_ujian', JSON.stringify(db));
-            alert('Nilai berhasil disimpan dan dikunci secara permanen.');
+            alert('Sukses memperbarui status dan komentar pembimbing.');
             render();
         };
 
-        // Panggil fungsi render utama saat halaman dimuat
+        window.kunciNilai = function(id, penguji, isSempro) {
+            let db = JSON.parse(localStorage.getItem('database_ujian')) || [];
+            let skor = '-';
+            let catatan = document.getElementById(`catatan-${penguji}-${id}`).value;
+            let kelulusan = document.getElementById(`lulus-${penguji}-${id}`).value;
+
+            if (!isSempro) {
+                skor = document.getElementById(`skor-${penguji}-${id}`).value;
+                if (!skor) {
+                    alert('Nilai angka wajib diisi!');
+                    return;
+                }
+            }
+
+            db = db.map(i => {
+                if (i.id === id) {
+                    if (penguji === 'penguji1') {
+                        i.nilaiPenguji1 = skor;
+                        i.catatanPenguji1 = catatan;
+                        i.kelulusanPenguji1 = kelulusan;
+                    } else if (penguji === 'penguji2') {
+                        i.nilaiPenguji2 = skor;
+                        i.catatanPenguji2 = catatan;
+                        i.kelulusanPenguji2 = kelulusan;
+                    }
+                }
+                return i;
+            });
+            localStorage.setItem('database_ujian', JSON.stringify(db));
+            alert('Berhasil mengunci evaluasi penilaian sidang.');
+            render();
+        };
+
+        // Render awal saat pertama kali dibuka
         render();
     </script>
 </body>
