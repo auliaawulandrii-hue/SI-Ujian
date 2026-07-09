@@ -363,7 +363,7 @@
                     Formulir Pendaftaran Ujian TA
                 </div>
                 <div class="card-body p-4">
-                    <form id="formDaftar">
+                    <form id="formDaftar" enctype="multipart/form-data">
 
                         <!-- SEKSI DATA PRIBADI (PENGISIAN MANDIRI SESUAI GAMBAR) -->
                         <div class="section-step mb-3">
@@ -374,18 +374,18 @@
                         <div class="row g-3 mb-4">
                             <div class="col-md-6">
                                 <label class="form-label">Nama Lengkap</label>
-                                <input type="text" class="form-control" id="namaMhs" value="Aulia Wulandari" required>
+                                <input type="text" class="form-control" id="namaMhs" name="nama" value="Aulia Wulandari" placeholder="Masukkan Nama" required>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Nomor Induk Mahasiswa (NIM)</label>
-                                <input type="text" class="form-control" id="nimMhs" value="60900124062" required>
+                                <input type="text" class="form-control" id="nimMhs" name="nim" value="60900124062" placeholder="Masukkan NIM" required>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">No HP / WhatsApp</label>
                                 <input type="text" class="form-control" id="hpMhs" value="082191249546" required>
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label">Dosen Pembimbing Akademik (Dosen PA)</label>
+                                <label class="form-label">Dosen Pembimbing Academic (Dosen PA)</label>
                                 <input type="text" class="form-control" id="paMhs" value="Izmy S.Kom M.Cs" required>
                             </div>
                         </div>
@@ -399,7 +399,7 @@
                         <div class="row g-3 mb-4">
                             <div class="col-md-12">
                                 <label class="form-label">Pilih Tahapan Ujian Akademik yang Tersedia</label>
-                                <select class="form-select" id="jenisUjian" onchange="renderUploadFieldsDinamis()">
+                                <select class="form-select" id="jenisUjian" name="jenis" onchange="renderUploadFieldsDinamis()">
                                     <option value="Proposal" id="optProp">1. Seminar Proposal</option>
                                     <option value="Hasil" id="optHasil">2. Seminar Hasil</option>
                                     <option value="Munaqasyah" id="optMuna">3. Ujian Akhir / Munaqasyah</option>
@@ -407,7 +407,7 @@
                             </div>
                             <div class="col-md-12">
                                 <label class="form-label">Judul Lengkap Manuskrip Penelitian Tugas Akhir</label>
-                                <textarea class="form-control" id="judulTA" placeholder="Ketikkan judul lengkap laporan penelitian skripsi Anda..." required></textarea>
+                                <textarea class="form-control" id="judulTA" name="judul" placeholder="Ketikkan judul lengkap laporan penelitian skripsi Anda..." required></textarea>
                             </div>
                         </div>
 
@@ -422,8 +422,8 @@
                         </div>
 
                         <div class="mt-4">
-                            <button type="submit" class="btn btn-success px-4 py-2 fw-semibold" style="background-color: #14532d; border: none; border-radius: 8px;">
-                                <i class="bi bi-cloud-arrow-up-fill me-1"></i> Kirim Dokumen ke Datastore
+                            <button type="submit" name="submit_daftar" class="btn btn-success px-4 py-2 fw-semibold" style="background-color: #14532d; border: none; border-radius: 8px;">
+                                <i class="bi bi-cloud-arrow-up-fill me-1"></i> Kirim Berkas
                             </button>
                         </div>
                     </form>
@@ -517,39 +517,9 @@
         document.getElementById('lblNim').innerText = nimSesi;
 
         // KODE BARU: Langsung bersihkan memori lama khusus NIM Anda agar tidak menumpuk duplikat
-        const databaseBersihAulia = [{
-            id: 101,
-            nim: "60900124062",
-            nama: "Aulia Wulandari",
-            jenis: "Proposal",
-            judul: "sistem informasi manajemen",
-            berkas: "proposal_aulia.pdf",
-            statusPersetujuan: "setuju",
-            statusVerifikasiAdmin: "setuju",
-            jadwal: "Ujian selesai dilaksanakan",
-            nilai: "-",
-            kelulusan: "lulus"
-        }, {
-            id: 102,
-            nim: "60900124062",
-            nama: "Aulia Wulandari",
-            jenis: "Hasil",
-            judul: "sistem informasi manajemen",
-            berkas: "naskah_hasil_aulia.pdf",
-            statusPersetujuan: "proses",
-            statusVerifikasiAdmin: "proses",
-            jadwal: "Menunggu Verifikasi Berkas",
-            nilai: "-",
-            kelulusan: "PROSES"
-        }];
-
-        // Ambil data mahasiswa lain jika ada, buang data Aulia yang lama agar tidak double
+        // ✅ KODE BARU: Membiarkan database berjalan murni tanpa paksaan data dummy
         let currentDB = JSON.parse(localStorage.getItem('database_ujian')) || [];
-        let dbTanpaAuliaLama = currentDB.filter(item => item.nim !== "60900124062");
-
-        // Satukan data bersih
-        let finalDatabase = [...dbTanpaAuliaLama, ...databaseBersihAulia];
-        localStorage.setItem('database_ujian', JSON.stringify(finalDatabase));
+        localStorage.setItem('database_ujian', JSON.stringify(currentDB));
 
         // Jalankan fungsi render utama
         renderDashboardMetrics();
@@ -592,7 +562,8 @@
                     <div class="col-md-6">
                         <label class="form-label">1. Unggah Kartu Kontrol</label>
                         <div class="file-hint">Upload 1 supported file: PDF. Max 10 MB.</div>
-                        <input type="file" class="form-control" id="file_1" accept=".pdf" required>
+                        <!-- PENGERJAAN SINKRON: Menyematkan name agar terbaca PHP backend -->
+                        <input type="file" class="form-control" id="file_1" name="berkas_sidang" accept=".pdf" required>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label">2. Unggah Naskah Proposal (Pdf)</label>
@@ -622,7 +593,8 @@
                     <div class="col-md-6">
                         <label class="form-label">1. Unggah SK Pembimbing</label>
                         <div class="file-hint">Upload 1 supported file: PDF. Max 10 MB.</div>
-                        <input type="file" class="form-control" id="file_1" accept=".pdf" required>
+                        <!-- PENGERJAAN SINKRON: Menyematkan name agar terbaca PHP backend -->
+                        <input type="file" class="form-control" id="file_1" name="berkas_sidang" accept=".pdf" required>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label">2. Unggah SK Pelaksanaan Ujian SEMPRO</label>
@@ -672,7 +644,8 @@
                     <div class="col-md-6">
                         <label class="form-label">1. Unggah SK Pelaksanaan Ujian Seminar Hasil</label>
                         <div class="file-hint">Upload 1 supported file: PDF. Max 10 MB.</div>
-                        <input type="file" class="form-control" id="file_1" accept=".pdf" required>
+                        <!-- PENGERJAAN SINKRON: Menyematkan name agar terbaca PHP backend -->
+                        <input type="file" class="form-control" id="file_1" name="berkas_sidang" accept=".pdf" required>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label">2. Unggah Berita Acara Seminar Hasil</label>
@@ -796,6 +769,10 @@
         function validasiAlurUjian() {
             const db = JSON.parse(localStorage.getItem('database_ujian')) || [];
 
+            // DEKLARASI FIX (ANTI-CRASH)
+            const infoBox = document.getElementById('statusAlurBox');
+            const optHasil = document.getElementById('optHasil');
+
             // FILTER KELAYAKAN BERDASARKAN MAHASISWA YANG SEDANG LOGIN AKTIF
             const statusProp = db.find(i => i.jenis === 'Proposal' && i.nim === nimSesi);
             const statusHasil = db.find(i => i.jenis === 'Hasil' && i.nim === nimSesi);
@@ -840,47 +817,92 @@
             document.getElementById('lblSapaan').innerText = this.value;
         });
 
+
         document.getElementById('formDaftar').addEventListener('submit', function(e) {
-            e.preventDefault();
+            e.preventDefault(); // Menahan halaman agar tidak reload kosong
+
             const jenis = document.getElementById('jenisUjian').value;
             const judul = document.getElementById('judulTA').value;
             const nama = document.getElementById('namaMhs').value;
             const nim = document.getElementById('nimMhs').value;
 
-            let db = JSON.parse(localStorage.getItem('database_ujian')) || [];
-            const idx = db.findIndex(i => i.jenis === jenis && i.nim === nim && i.kelulusan === 'tidak lulus');
+            // 🔄 PERBAIKAN UTAMA: Mencari semua elemen input file yang ada di layar saat itu secara dinamis
+            const seluruhFileInput = document.querySelectorAll('#dynamicUploadArea input[type="file"]');
 
-            if (idx !== -1) {
-                db[idx].judul = judul;
-                db[idx].nama = nama;
-                db[idx].nim = nim;
-                db[idx].statusPersetujuan = 'proses';
-                db[idx].statusVerifikasiAdmin = 'proses';
-                db[idx].jadwal = 'Menunggu Validasi Ulang Dokumen Perbaikan';
-                db[idx].nilai = '-';
-                db[idx].kelulusan = 'PROSES';
-                alert('Dokumen-dokumen perbaikan berhasil diunggah ulang!');
-            } else {
-                db.push({
-                    id: Date.now(),
-                    jenis,
-                    judul,
-                    nama: nama,
-                    nim: nim,
-                    tanggal: new Date().toLocaleDateString('id-ID'),
-                    berkas: "Berkas Terpisah (Sudah Terunggah Sesuai Aturan)",
-                    statusPersetujuan: 'proses',
-                    statusVerifikasiAdmin: 'proses',
-                    jadwal: 'Menunggu Verifikasi Berkas',
-                    nilai: '-',
-                    kelulusan: 'PROSES'
+            let listNamaSemuaBerkas = [];
+            const formData = new FormData();
+            formData.append('nim', nim);
+            formData.append('nama', nama);
+            formData.append('jenis', jenis);
+            formData.append('judul', judul);
+
+            // Looping menyeluruh untuk mengambil berkas yang diisi oleh mahasiswa
+            seluruhFileInput.forEach((inputElement) => {
+                if (inputElement.files.length > 0) {
+                    // Jika input mendukung multi-file (seperti input nomor 4 di Seminar Hasil)
+                    for (let k = 0; k < inputElement.files.length; k++) {
+                        let namaFile = inputElement.files[k].name;
+                        listNamaSemuaBerkas.push(namaFile); // Masukkan semua nama file asli ke array teks
+                        formData.append('berkas_sidang[]', inputElement.files[k]); // Masukkan file fisik untuk PHP
+                    }
+                }
+            });
+
+            // Ubah teks tampilan kolom berkas ringkasan menjadi informasi Multi File
+            let jumlahFileTerunggah = listNamaSemuaBerkas.length;
+            let teksPerwakilanMultiFile = `Multi File (${jumlahFileTerunggah} Berkas Sudah Terunggah)`;
+
+            // Jalankan pengiriman file fisik ke server PHP di latar belakang
+            fetch('proses_upload.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.text())
+                .then(data => {
+                    let db = JSON.parse(localStorage.getItem('database_ujian')) || [];
+                    const idx = db.findIndex(i => i.jenis === jenis && i.nim === nim && i.kelulusan === 'tidak lulus');
+
+                    if (idx !== -1) {
+                        db[idx].judul = judul;
+                        db[idx].nama = nama;
+                        db[idx].nim = nim;
+                        db[idx].berkas = teksPerwakilanMultiFile;
+                        db[idx].semua_berkas = listNamaSemuaBerkas; // Menyimpan array nama file lengkap ke localStorage
+                        db[idx].statusPersetujuan = 'proses';
+                        db[idx].statusVerificationAdmin = 'belum_proses';
+                        db[idx].jadwal = 'Menunggu Validasi Ulang Dokumen Perbaikan';
+                        db[idx].nilai = '-';
+                        db[idx].kelulusan = 'PROSES';
+                    } else {
+                        db.push({
+                            id: Date.now(),
+                            jenis: jenis,
+                            judul: judul,
+                            nama: nama,
+                            nim: nim,
+                            tanggal: new Date().toLocaleDateString('id-ID'),
+                            berkas: teksPerwakilanMultiFile,
+                            semua_berkas: listNamaSemuaBerkas, // Menyimpan array nama file lengkap ke localStorage
+                            statusPersetujuan: 'proses',
+                            statusVerifikasiAdmin: 'belum_proses',
+                            jadwal: 'Menunggu Kelayakan Dosen Pembimbing',
+                            nilai: '-',
+                            kelulusan: 'PROSES'
+                        });
+                    }
+
+                    localStorage.setItem('database_ujian', JSON.stringify(db));
+                    alert('Sukses! Seluruh berkas pendaftaran ' + jenis + ' telah terkirim ke Portal Evaluasi.');
+
+                    switchTab('dashboard');
+                    renderDashboardMetrics();
+                    document.getElementById('formDaftar').reset();
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Terjadi kesalahan koneksi saat mengunggah berkas.');
                 });
-                alert('Seluruh dokumen persyaratan berhasil dikirim ke Portal Dosen!');
-            }
-            localStorage.setItem('database_ujian', JSON.stringify(db));
-            switchTab('dashboard');
         });
-
         renderDashboardMetrics();
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
