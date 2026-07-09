@@ -27,7 +27,6 @@
         
         html {
             scroll-behavior: smooth;
-            /* Membuat transisi perpindahan halaman menjadi sangat halus */
         }
         
         .sidebar {
@@ -131,7 +130,6 @@
             border-radius: 15px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, .05);
             scroll-margin-top: 30px;
-            /* Menjaga jarak batas atas setelah meluncur */
         }
         
         .table thead {
@@ -169,16 +167,8 @@
                 <i class="bi bi-speedometer2"></i> Dashboard
             </a>
 
-            <a onclick="scrollToSection('seksiRuangan')">
-                <i class="bi bi-building"></i> Data Ruangan
-            </a>
-
             <a onclick="scrollToSection('seksiVerifikasi')">
                 <i class="bi bi-file-earmark-check"></i> Verifikasi Berkas
-            </a>
-
-            <a onclick="scrollToSection('seksiPenjadwalan')">
-                <i class="bi bi-calendar-event"></i> Penjadwalan
             </a>
 
             <a onclick="scrollToSection('seksiLaporan')">
@@ -188,7 +178,7 @@
             <hr>
 
             <a href="index.html" class="text-danger">
-                <i class="bi bi-box-arrow-right"></i> Logout
+                <i class="bi bi-box-arrow-right"></i> Keluar
             </a>
 
         </div>
@@ -365,7 +355,7 @@
 
             <div class="col-lg-4">
 
-                <div class="card card-section" onclick="scrollToSection('seksiPenjadwalan')" style="cursor: pointer;">
+                <div class="card card-section" onclick="scrollToSection('seksiLaporan')" style="cursor: pointer;">
 
                     <div class="card-body">
 
@@ -403,49 +393,37 @@
 
         <div class="row mt-4">
 
-            <div class="col-lg-3 mb-3">
+            <div class="col-lg-4 mb-3">
 
                 <button class="btn btn-success w-100 p-3" onclick="scrollToSection('seksiVerifikasi')">
 
                 <i class="bi bi-file-earmark-check-fill"></i>
 
-                Verifikasi Berkas
+                Verifikasi Berkas & Atur Jadwal
 
             </button>
 
             </div>
 
-            <div class="col-lg-3 mb-3">
-
-                <button class="btn btn-primary w-100 p-3" onclick="scrollToSection('seksiPenjadwalan')">
-
-                <i class="bi bi-calendar2-check-fill"></i>
-
-                Jadwalkan Ujian
-
-            </button>
-
-            </div>
-
-            <div class="col-lg-3 mb-3">
+            <div class="col-lg-4 mb-3">
 
                 <button class="btn btn-warning w-100 p-3 text-white" onclick="scrollToSection('seksiStatistik')">
 
                 <i class="bi bi-bar-chart-fill"></i>
 
-                Statistik
+                Statistik Ujian
 
             </button>
 
             </div>
 
-            <div class="col-lg-3 mb-3">
+            <div class="col-lg-4 mb-3">
 
                 <button class="btn btn-danger w-100 p-3" onclick="alert('Simulasi Export Laporan Yudisium Akhir ke PDF Berhasil!')">
 
                 <i class="bi bi-file-earmark-pdf-fill"></i>
 
-                Export PDF
+                Export PDF Laporan
 
             </button>
 
@@ -497,235 +475,6 @@
                         </tbody>
 
                     </table>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <!-- DATA RUANGAN & PENJADWALAN -->
-
-        <div class="card card-section mt-4" id="seksiPenjadwalan">
-
-            <div class="card-body">
-
-                <h4 class="mb-4" id="seksiRuangan">
-
-                    <i class="bi bi-calendar-event-fill"></i> Penjadwalan & Data Ruangan
-
-                </h4>
-
-                <div class="row">
-
-                    <div class="col-md-6">
-
-                        <label>
-
-    Nama Mahasiswa
-
-    </label>
-
-                        <input list="listMahasiswa" class="form-control" id="namaMahasiswa" placeholder="Ketik nama mahasiswa...">
-
-                        <datalist id="listMahasiswa">
-                        </datalist>
-
-                    </div>
-
-                    <div class="col-md-6">
-
-                        <label>
-
-    Jenis Ujian
-
-    </label>
-
-                        <select class="form-select" id="jenisUjianForm">
-
-    <option value="Proposal">
-
-    Proposal
-
-    </option>
-
-    <option value="Hasil">
-
-    Hasil
-
-    </option>
-
-    <option value="Munaqasyah">
-
-    Munaqasyah
-
-    </option>
-
-    </select>
-
-                    </div>
-
-                </div>
-
-                <div class="row mt-3">
-
-                    <div class="col-md-4">
-
-                        <label>
-
-    Tanggal
-
-    </label>
-
-                        <input type="date" class="form-control" id="tanggal">
-
-                    </div>
-
-                    <div class="col-md-4">
-
-                        <label>
-
-    Jam
-
-    </label>
-
-                        <input type="time" class="form-control" id="jam">
-
-                    </div>
-
-                    <div class="col-md-4">
-
-                        <label>
-
-    Ruangan (Pilih Slot Ruangan)
-
-    </label>
-
-                        <select class="form-select" id="ruangan">
-
-    <option>
-
-    Ruang Sidang A
-
-    </option>
-
-    <option>
-
-    Ruang Sidang B
-
-    </option>
-
-    <option>
-
-    Ruang Sidang C
-
-    </option>
-
-    </select>
-
-                    </div>
-
-                </div>
-
-                <div class="row mt-3">
-
-                    <div class="col-md-4">
-
-                        <label>
-
-    Ketua Penguji
-
-    </label>
-
-                        <select class="form-select" id="ketuaPenguji">
-
-    <option>
-
-    Nahrun Hartono, M.Kom.
-
-    </option>
-
-    <option>
-
-    Dr. Ahmad, M.T.
-
-    </option>
-
-    </select>
-
-                    </div>
-
-                    <div class="col-md-4">
-
-                        <label>
-
-    Sekretaris
-
-    </label>
-
-                        <select class="form-select">
-
-    <option>
-
-    Nurhidayah
-
-    </option>
-
-    <option>
-
-    Rahmat
-
-    </option>
-
-    </select>
-
-                    </div>
-
-                    <div class="col-md-4">
-
-                        <label>
-
-    Anggota
-
-    </label>
-
-                        <select class="form-select">
-
-    <option>
-
-    Herman
-
-    </option>
-
-    <option>
-
-    Ridwan
-
-    </option>
-
-    </select>
-
-                    </div>
-
-                </div>
-
-                <div class="mt-4">
-
-                    <button class="btn btn-success" onclick="simpanJadwal()">
-
-    <i class="bi bi-check-circle-fill"></i>
-
-    Simpan Jadwal
-
-    </button>
-
-                    <button class="btn btn-outline-primary" onclick="triggerBentrokCheck()">
-
-    <i class="bi bi-search"></i>
-
-    Cek Bentrok Jadwal
-
-    </button>
 
                 </div>
 
@@ -921,7 +670,7 @@
 
                     <strong class="me-auto">Sistem</strong>
 
-                    <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+                    <button type="button" class="btn-close" data-bs-toast="dismiss"></button>
 
                 </div>
 
@@ -931,15 +680,91 @@
 
         </div>
 
+        <!-- ========================================== -->
+        <!-- MODAL BOOTSTRAP UNTUK PRATINJAU DOKUMEN PDF -->
+        <!-- ========================================== -->
+        <div class="modal fade" id="modalPratinjauPDF" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-xl modal-dialog-centered">
+                <div class="modal-content" style="border-radius: 15px; overflow: hidden; height: 85vh;">
+                    <div class="modal-header bg-success text-white">
+                        <h5 class="modal-title fw-bold"><i class="bi bi-file-earmark-pdf-fill"></i> Pratinjau Dokumen Naskah Mahasiswa</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body p-0 bg-light">
+                        <iframe id="framePratinjauPDF" src="" class="w-100 h-100" frameborder="0"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- MODAL POP-UP PENJADWALAN OTOMATIS (BARU)   -->
+        <!-- ========================================== -->
+        <div class="modal fade" id="modalJadwalOtomatis" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+            <div class="modal-dialog modal-md modal-dialog-centered">
+                <div class="modal-content" style="border-radius: 15px; overflow: hidden;">
+                    <div class="modal-header text-white" style="background-color: #14532d;">
+                        <h5 class="modal-title fw-bold"><i class="bi bi-calendar-plus me-2"></i>Atur Jadwal & Penguji Sidang</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body p-4">
+                        <input type="hidden" id="mdl_id_daftar">
+                        <div class="mb-3 bg-light p-3 rounded-3 border-start border-success border-3">
+                            <span class="text-muted d-block small" style="font-size: 11px; font-weight: 600;">MAHASISWA & TAHAPAN:</span>
+                            <strong class="text-dark" id="mdl_lbl_mhs">Aulia Wulandari (60900124062)</strong>
+                            <span class="badge bg-secondary ms-2" id="mdl_lbl_jenis">Proposal</span>
+                        </div>
+
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold">Tanggal Ujian</label>
+                                <input type="date" class="form-control" id="mdl_tanggal" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold">Jam/Waktu (WITA)</label>
+                                <input type="time" class="form-control" id="mdl_jam" required>
+                            </div>
+                            <div class="col-md-12">
+                                <label class="form-label small fw-bold">Ruangan Sidang</label>
+                                <select class="form-select" id="mdl_ruangan">
+                                    <option value="Ruang Sidang A">Ruang Sidang A</option>
+                                    <option value="Ruang Sidang B">Ruang Sidang B</option>
+                                    <option value="Ruang Sidang C">Ruang Sidang C</option>
+                                </select>
+                            </div>
+                            <!-- Dosen Penguji dibatasi murni 2 orang -->
+                            <div class="col-md-12">
+                                <label class="form-label small fw-bold">Ketua Penguji (Penguji 1)</label>
+                                <select class="form-select" id="mdl_penguji1">
+                                    <option value="Dr. Nahrun Hartono, M.Kom.">Dr. Nahrun Hartono, M.Kom.</option>
+                                    <option value="Dr. Ahmad, M.T.">Dr. Ahmad, M.T.</option>
+                                </select>
+                            </div>
+                            <div class="col-md-12">
+                                <label class="form-label small fw-bold">Sekretaris Sidang (Penguji 2)</label>
+                                <select class="form-select" id="mdl_penguji2">
+                                    <option value="Nurhidayah">Nurhidayah</option>
+                                    <option value="Rahmat">Rahmat</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer bg-light border-top">
+                        <button type="button" class="btn btn-secondary px-3" data-bs-dismiss="modal">Batal</button>
+                        <button type="button" class="btn btn-success px-4" style="background-color: #14532d; border:none;" onclick="simpanJadwalOtomatis()">
+                            <i class="bi bi-calendar-check me-1"></i> Simpan & Kunci Jadwal
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
 
         <script>
             let db = JSON.parse(localStorage.getItem("database_ujian")) || [];
 
-            // ==========================================
-            // KONTROL LINK SELECTION INTERAKTIF SMOOTH
-            // ==========================================
             function scrollToSection(id) {
                 const element = document.getElementById(id);
                 if (element) {
@@ -949,7 +774,6 @@
                 }
             }
 
-            // Memperbarui indikator aktif di sidebar saat diklik
             const menuLinks = document.querySelectorAll("#sidebarMenu a");
             menuLinks.forEach(link => {
                 link.addEventListener("click", function() {
@@ -957,6 +781,66 @@
                     this.classList.add("active");
                 });
             });
+
+            function bukaDaftarMultiBerkasAdmin(nim, nama, encodedArray) {
+                const arrayBerkas = JSON.parse(decodeURIComponent(encodedArray));
+                let folderMhs = nim + "_" + nama.replace(/[^a-zA-Z0-9]/g, "");
+
+                let htmlKonten = `
+                    <html>
+                    <head>
+                        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+                        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+                        <style>
+                            body { font-family: 'Poppins', sans-serif; padding: 20px; background: #f8f9fa; }
+                            .card-header { background: #14532d !important; color: white !important; font-weight: 600; }
+                            .btn-review { border-color: #14532d; color: #14532d; font-size: 12px; font-weight: 500; }
+                            .btn-review:hover { background: #14532d; color: white; }
+                        </style>
+                    </head>
+                    <body>
+                        <div class="card shadow-sm border-0 rounded-3">
+                            <div class="card-header d-flex align-items-center">
+                                <i class="bi bi-folder2-open me-2 fs-5"></i> Dokumen Kelengkapan Persyaratan Sidang Mahasiswa
+                            </div>
+                            <div class="list-group list-group-flush">`;
+
+                arrayBerkas.forEach((namaFile, index) => {
+                    let jalurFileFisik = "uploads/" + folderMhs + "/" + namaFile;
+                    htmlKonten += `
+                        <div class="list-group-item d-flex justify-content-between align-items-center py-3">
+                            <div>
+                                <span class="fw-bold text-dark d-block" style="font-size:13px;">${index + 1}. ${namaFile}</span>
+                                <small class="text-muted" style="font-size:11px;"><i class="bi bi-filetype-pdf text-danger me-1"></i>Ekstensi Berkas: Dokumen PDF Valid</small>
+                            </div>
+                            <a href="${jalurFileFisik}" target="_blank" class="btn btn-sm btn-review px-3 rounded-pill">
+                                <i class="bi bi-eye-fill me-1"></i> Buka File
+                            </a>
+                        </div>`;
+                });
+
+                htmlKonten += `</div></div></body></html>`;
+
+                const iframe = document.getElementById("framePratinjauPDF");
+                iframe.src = "about:blank";
+
+                const modalPDF = new bootstrap.Modal(document.getElementById('modalPratinjauPDF'));
+                modalPDF.show();
+
+                setTimeout(() => {
+                    let doc = iframe.contentDocument || iframe.contentWindow.document;
+                    doc.open();
+                    doc.write(htmlKonten);
+                    doc.close();
+                }, 100);
+            }
+
+            function tampilkanBerkasPDF(namaFile) {
+                const folderPath = "uploads/" + namaFile;
+                document.getElementById("framePratinjauPDF").src = folderPath;
+                const modalPDF = new bootstrap.Modal(document.getElementById('modalPratinjauPDF'));
+                modalPDF.show();
+            }
 
             function renderChartDinamis() {
                 let pCount = 0,
@@ -1034,14 +918,19 @@
                 const tbody = document.getElementById("tabelVerifikasi");
                 tbody.innerHTML = "";
 
-                if (db.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="6" class="text-center text-muted">Tidak ada berkas masuk untuk diverifikasi</td></tr>`;
+                const dataUntukAdmin = db.filter(item => item.statusPersetujuan === 'setuju');
+
+                if (dataUntukAdmin.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="6" class="text-center text-muted">Tidak ada berkas masuk dari Dosen Pembimbing</td></tr>`;
                     return;
                 }
 
-                db.forEach((item, index) => {
+                dataUntukAdmin.forEach((item) => {
                     let badgeBg = item.statusVerifikasiAdmin === "proses" ? "bg-warning" : (item.statusVerifikasiAdmin === "setuju" ? "bg-success" : "bg-danger");
                     let statusLabel = item.statusVerifikasiAdmin === "proses" ? "Menunggu" : (item.statusVerifikasiAdmin === "setuju" ? "Disetujui" : "Ditolak");
+
+                    let listBerkasMhs = item.semua_berkas || [item.berkas];
+                    let stringArrayBerkas = encodeURIComponent(JSON.stringify(listBerkasMhs));
 
                     tbody.innerHTML += `
                     <tr>
@@ -1049,8 +938,8 @@
                         <td>${item.nama || 'Aulia Wulandari'}</td>
                         <td>${item.jenis}</td>
                         <td>
-                            <button class="btn btn-secondary btn-sm" onclick="alert('Membuka file: ${item.berkas || 'Dokumen Persyaratan.pdf'}')">
-                                <i class="bi bi-file-earmark-pdf"></i> Lihat Berkas
+                            <button class="btn btn-secondary btn-sm" onclick="bukaDaftarMultiBerkasAdmin('${item.nim}', '${item.nama}', '${stringArrayBerkas}')">
+                                <i class="bi bi-folder-check"></i> Lihat Berkas (${listBerkasMhs.length})
                             </button>
                         </td>
                         <td><span class="badge ${badgeBg}">${statusLabel}</span></td>
@@ -1062,97 +951,106 @@
                 });
             }
 
+            // ========================================================
+            // INTERSEPTOR TOMBOL SETUJUI: LANGSUNG PICU POP-UP JADWAL
+            // ========================================================
             function ubahStatusBerkas(id, status) {
-                db = db.map(item => {
-                    if (item.id === id) {
-                        item.statusVerifikasiAdmin = status;
-                        item.statusPersetujuan = status;
-                        if (status === 'setuju') {
-                            item.kelulusan = "lulus";
-                            item.nilai = item.jenis === "Proposal" ? "-" : "88";
-                        } else {
-                            item.kelulusan = "tidak lulus";
-                        }
+                if (status === 'tolak') {
+                    if (confirm('Apakah Anda yakin ingin menolak berkas pendaftaran mahasiswa ini?')) {
+                        db = db.map(item => {
+                            if (item.id === id) {
+                                item.statusVerifikasiAdmin = 'tolak';
+                                item.jadwal = 'Berkas ditolak oleh Admin Prodi. Periksa kembali dokumen Anda.';
+                                item.kelulusan = 'REVISI';
+                            }
+                            return item;
+                        });
+                        localStorage.setItem("database_ujian", JSON.stringify(db));
+                        tampilToast(`Status berkas diubah menjadi: ditolak`);
+                        refreshAll();
                     }
-                    return item;
-                });
-                localStorage.setItem("database_ujian", JSON.stringify(db));
-                tampilToast(`Status berkas berhasil diubah menjadi: ${status.toUpperCase()}`);
-                refreshAll();
+                } else if (status === 'setuju') {
+                    const mhsData = db.find(item => item.id === id);
+                    if (!mhsData) return;
+
+                    // Otomatis mengisikan identitas ke form pop-up modal
+                    document.getElementById('mdl_id_daftar').value = id;
+                    document.getElementById('mdl_lbl_mhs').innerText = mhsData.nama + " (" + mhsData.nim + ")";
+                    document.getElementById('mdl_lbl_jenis').innerText = mhsData.jenis;
+
+                    // Picu jendela pop-up penjadwalan
+                    const modalJadwal = new bootstrap.Modal(document.getElementById('modalJadwalOtomatis'));
+                    modalJadwal.show();
+                }
             }
 
-            function loadMahasiswa() {
-                const list = document.getElementById("listMahasiswa");
-                list.innerHTML = "";
-                db.forEach(item => {
-                    if (item.statusPersetujuan === "setuju") {
-                        list.innerHTML += `<option value="${item.nama}">`;
-                    }
-                });
-            }
+            // ========================================================
+            // FUNGSI EKSEKUSI PENJADWALAN DAN PENGUNCIAN 2 DOSEN PENGUJI
+            // ========================================================
+            function simpanJadwalOtomatis() {
+                const id = parseInt(document.getElementById('mdl_id_daftar').value);
+                const tgl = document.getElementById('mdl_tanggal').value;
+                const jam = document.getElementById('mdl_jam').value;
+                const ruang = document.getElementById('mdl_ruangan').value;
+                const p1 = document.getElementById('mdl_penguji1').value;
+                const p2 = document.getElementById('mdl_penguji2').value;
 
-            function simpanJadwal() {
-                const namaInput = document.getElementById("namaMahasiswa").value;
-                const jenisUjian = document.getElementById("jenisUjianForm").value;
-                const tanggal = document.getElementById("tanggal").value;
-                const jam = document.getElementById("jam").value;
-                const ruangan = document.getElementById("ruangan").value;
-                const penguji = document.getElementById("ketuaPenguji").value;
-
-                if (!namaInput || !tanggal || !jam) {
-                    alert("Harap isi Nama Mahasiswa, Tanggal, dan Jam pelaksanaan ujian!");
+                if (!tgl || !jam) {
+                    alert("Harap tentukan tanggal dan jam pelaksanaan ujian!");
                     return;
                 }
 
-                if (cekBentrok(tanggal, jam, ruangan)) {
+                // Cek bentrok jadwal ruangan
+                let bentrok = false;
+                db.forEach(item => {
+                    if (item.jadwal && item.jadwal.includes(tgl) && item.jadwal.includes(jam) && item.jadwal.includes(ruang)) {
+                        bentrok = true;
+                    }
+                });
+
+                if (bentrok) {
                     alert("Peringatan! Ruangan tersebut sudah terpakai pada jadwal dan jam terpilih.");
                     return;
                 }
 
-                let found = false;
+                const opsiTanggal = {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                };
+                const tglFormat = new Date(tgl).toLocaleDateString('id-ID', opsiTanggal);
+                const stringJadwalLengkap = `${tglFormat} - Jam ${jam} WITA (${ruang})`;
+
                 db = db.map(item => {
-                    if (item.nama === namaInput && item.jenis === jenisUjian) {
-                        item.jadwal = `Waktu: ${tanggal} ${jam} | Tempat: ${ruangan} | Penguji: ${penguji}`;
-                        found = true;
+                    if (item.id === id) {
+                        item.statusVerifikasiAdmin = 'setuju';
+                        item.jadwal = stringJadwalLengkap;
+
+                        // Menyiapkan field penilaian 2 Dosen Penguji sesuai dashboard_dosen.html
+                        item.nilaiPenguji1 = '-';
+                        item.nilaiPenguji2 = '-';
+                        item.catatanPenguji1 = '';
+                        item.catatanPenguji2 = '';
+                        item.kelulusanPenguji1 = 'lulus';
+                        item.kelulusanPenguji2 = 'lulus';
+                        item.kelulusan = 'PROSES';
                     }
                     return item;
                 });
 
-                if (!found) {
-                    alert(`Data pengajuan ${jenisUjian} untuk mahasiswa bernama "${namaInput}" tidak ditemukan dalam status disetujui.`);
-                    return;
-                }
-
                 localStorage.setItem("database_ujian", JSON.stringify(db));
+
+                const modalEl = document.getElementById('modalJadwalOtomatis');
+                const modalInstance = bootstrap.Modal.getInstance(modalEl);
+                modalInstance.hide();
+
                 tampilToast("Jadwal pelaksanaan ujian berhasil dikunci ke sistem!");
                 refreshAll();
             }
 
-            function triggerBentrokCheck() {
-                const tanggal = document.getElementById("tanggal").value;
-                const jam = document.getElementById("jam").value;
-                const ruangan = document.getElementById("ruangan").value;
-
-                if (!tanggal || !jam) {
-                    alert("Pilih tanggal & jam terlebih dahulu!");
-                    return;
-                }
-
-                if (cekBentrok(tanggal, jam, ruangan)) {
-                    alert("🔴 BENTROK! Ruangan sudah terisi.");
-                } else {
-                    alert("🟢 AMAN! Ruangan kosong dan siap digunakan.");
-                }
-            }
-
-            function cekBentrok(tanggal, jam, ruangan) {
-                let bentrok = false;
-                db.forEach(item => {
-                    if (item.jadwal && item.jadwal.includes(tanggal) && item.jadwal.includes(jam) && item.jadwal.includes(ruangan)) {
-                        bentrok = true;
-                    }
-                });
-                return bentrok;
+            function loadMahasiswa() {
+                // Dipertahankan agar tidak eror saat dipanggil di refreshAll
             }
 
             function loadAktivitas() {
@@ -1164,7 +1062,6 @@
                     return;
                 }
 
-                // Render data aktivitas terbaru dari database yang sudah disaring unik
                 db.slice().reverse().forEach(item => {
                     let badgeColor = item.statusPersetujuan === 'setuju' ? 'bg-success' : 'bg-warning text-dark';
                     tbody.innerHTML += `
@@ -1186,7 +1083,6 @@
                     return;
                 }
 
-                // Render data cetak laporan cetak dari database yang sudah disaring unik
                 db.forEach(item => {
                     let badgeColor = item.kelulusan === "lulus" ? "bg-success" : (item.kelulusan === "tidak lulus" ? "bg-danger" : "bg-warning text-dark");
                     tbody.innerHTML += `
@@ -1207,19 +1103,13 @@
                 toast.show();
             }
 
-            // =========================================================
-            // SOLUSI MUTLAK: PENYARINGAN BERDASARKAN KATA KUNCI UTAMA
-            // =========================================================
             function refreshAll() {
                 let rawDB = JSON.parse(localStorage.getItem("database_ujian")) || [];
-
-                // Urutkan dari data yang paling baru dimasukkan
                 rawDB.sort((a, b) => b.id - a.id);
 
                 let mapUnik = new Map();
 
                 rawDB.forEach(item => {
-                    // Normalisasi kata kunci jenis ujian agar variasi teks lama ikut tersaring
                     let jenisSederhana = "";
                     let teksJenis = item.jenis.toLowerCase();
 
@@ -1233,24 +1123,18 @@
                         jenisSederhana = item.jenis;
                     }
 
-                    // Buat kunci unik gabungan NIM + Jenis Sederhana
-                    let kunciUnik = `${item.nim}-${jenisSederhana}`;
+                    let kunciUnik = item.id;
 
-                    // Hanya ambil data terbaru untuk jenis ujian tersebut, abaikan duplikatnya
                     if (!mapUnik.has(kunciUnik)) {
-                        // Paksa bersihkan variasi teks tampilan agar serasi
                         item.jenis = jenisSederhana;
                         mapUnik.set(kunciUnik, item);
                     }
                 });
 
-                // Hasil akhir dipastikan hanya menyisakan maksimal 2 baris data murni milik Aulia
                 db = Array.from(mapUnik.values()).reverse();
 
-                // Gambar ulang seluruh tabel ke layar
                 hitungDashboard();
                 renderTabelVerifikasi();
-                loadMahasiswa();
                 loadAktivitas();
                 loadLaporanTabel();
                 renderChartDinamis();
