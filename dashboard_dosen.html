@@ -139,7 +139,8 @@
         </div>
         <div class="menu">
             <a onclick="setView('pembimbing')" id="menu-pembimbing" class="active"><i class="bi bi-shield-check me-2"></i> Dosen Pembimbing</a>
-            <a onclick="setView('penguji')" id="menu-penguji"><i class="bi bi-mortarboard me-2"></i> Dosen Penguji</a>
+            <a onclick="setView('penguji1')" id="menu-penguji1"><i class="bi bi-mortarboard me-2"></i> Dosen Penguji 1</a>
+            <a onclick="setView('penguji2')" id="menu-penguji2"><i class="bi bi-person-badge me-2"></i> Dosen Penguji 2</a>
             <hr class="text-white-50">
             <a href="index.html" class="text-danger fw-bold"><i class="bi bi-box-arrow-right me-2"></i> Keluar</a>
         </div>
@@ -187,7 +188,7 @@
             </div>
         </div>
 
-        <div id="viewPenguji" style="display:none;">
+        <div id="viewPenguji1" style="display:none;">
             <div class="card card-section">
                 <div class="nav-tabs-custom d-flex">
                     <button class="nav-link active" onclick="filterPenguji('sempro', this)">Seminar Proposal (Sempro)</button>
@@ -201,11 +202,34 @@
                                     <th>Mahasiswa</th>
                                     <th>Agenda Sidang</th>
                                     <th>Judul TA</th>
-                                    <th width="240">Evaluasi 1 (Ketua)</th>
-                                    <th width="240">Evaluasi 2 (Sekretaris)</th>
+                                    <th width="320">Evaluasi Penguji 1</th>
                                 </tr>
                             </thead>
-                            <tbody id="tbodyPenguji"></tbody>
+                            <tbody id="tbodyPenguji1"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="viewPenguji2" style="display:none;">
+            <div class="card card-section">
+                <div class="nav-tabs-custom d-flex">
+                    <button class="nav-link active" onclick="filterPenguji('sempro', this)">Seminar Proposal (Sempro)</button>
+                    <button class="nav-link" onclick="filterPenguji('sidang', this)">Seminar Hasil & Munaqasyah</button>
+                </div>
+                <div class="card-body p-4">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover align-middle">
+                            <thead>
+                                <tr>
+                                    <th>Mahasiswa</th>
+                                    <th>Agenda Sidang</th>
+                                    <th>Judul TA</th>
+                                    <th width="320">Evaluasi Penguji 2</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbodyPenguji2"></tbody>
                         </table>
                     </div>
                 </div>
@@ -234,54 +258,72 @@
         let filterStatusPembimbing = 'proses';
         let filterTahapPenguji = 'sempro';
 
-        // ✅ SEKARANG BERBENTUK LET GLOBAL AGAR BISA DISWITCH SECARA DINAMIS
-        let dosenAktifLogin = "Dr. Nahrun Hartono, M.Kom.";
+        let dosenAktifLogin = "Dosen Pembimbing";
+        let dosenRoleAktif = "pembimbing";
 
-        // ========================================================
-        // FUNGSI SIMULASI UTAMA SWITCH ACCOUNT PORTAL DOSEN
-        // ========================================================
-        function gantiSesiDosen(namaDosenBaru) {
+        const savedDosenNama = localStorage.getItem('dosen_nama_aktif');
+        const savedDosenRole = localStorage.getItem('dosen_role_aktif');
+        if (savedDosenNama) {
+            dosenAktifLogin = savedDosenNama;
+        }
+        if (savedDosenRole) {
+            dosenRoleAktif = savedDosenRole;
+        }
+
+        function gantiSesiDosen(namaDosenBaru, kodeRole = 'pembimbing') {
             dosenAktifLogin = namaDosenBaru;
-            document.getElementById('lblDosenAktif').innerText = namaDosenBaru;
-            render();
-            console.log("Sesi simulasi dosen berhasil berpindah ke: " + namaDosenBaru);
+            dosenRoleAktif = kodeRole;
+            localStorage.setItem('dosen_nama_aktif', namaDosenBaru);
+            localStorage.setItem('dosen_role_aktif', kodeRole);
+            currentView = kodeRole === 'penguji1' ? 'penguji1' : kodeRole === 'penguji2' ? 'penguji2' : 'pembimbing';
+            setView(currentView);
+            console.log("Sesi simulasi dosen berhasil berpindah ke: " + namaDosenBaru + " (" + kodeRole + ")");
+        }
+
+        function renderPilihanAkunDosen() {
+            const containerAkses = document.getElementById('containerAksesDosen');
+            if (!containerAkses) return;
+
+            const akunList = [
+                { kode: 'penguji1', label: 'Penguji 1', icon: 'bi-person-badge', warna: 'success' },
+                { kode: 'penguji2', label: 'Penguji 2', icon: 'bi-person-badge', warna: 'primary' },
+                { kode: 'pembimbing', label: 'Dosen Pembimbing', icon: 'bi-person-workspace', warna: 'dark' }
+            ];
+
+            containerAkses.innerHTML = `
+                <div class="d-flex flex-wrap gap-2 align-items-center">
+                    <small class="text-secondary me-2">Pilih akun:</small>
+                    ${akunList.map(item => {
+                        const aktif = dosenRoleAktif === item.kode;
+                        const kelas = aktif ? `btn-${item.warna}` : 'btn-outline-secondary';
+                        return `
+                            <button class="btn btn-sm ${kelas} px-3 shadow-sm" type="button" onclick="gantiSesiDosen('${item.label}', '${item.kode}')">
+                                <i class="${item.icon} me-1"></i> ${item.label}
+                            </button>
+                        `;
+                    }).join('')}
+                </div>
+            `;
         }
 
         function setView(view) {
             currentView = view;
             document.getElementById('viewPembimbing').style.display = view === 'pembimbing' ? 'block' : 'none';
-            document.getElementById('viewPenguji').style.display = view === 'penguji' ? 'block' : 'none';
+            document.getElementById('viewPenguji1').style.display = view === 'penguji1' ? 'block' : 'none';
+            document.getElementById('viewPenguji2').style.display = view === 'penguji2' ? 'block' : 'none';
 
             document.getElementById('menu-pembimbing').classList.toggle('active', view === 'pembimbing');
-            document.getElementById('menu-penguji').classList.toggle('active', view === 'penguji');
+            document.getElementById('menu-penguji1').classList.toggle('active', view === 'penguji1');
+            document.getElementById('menu-penguji2').classList.toggle('active', view === 'penguji2');
 
-            document.getElementById('viewTitle').innerText = view === 'pembimbing' ? 'Panel Dosen Pembimbing' : 'Panel Dosen Penguji Sidang';
+            const titleMap = {
+                pembimbing: 'Panel Dosen Pembimbing',
+                penguji1: 'Panel Dosen Penguji 1',
+                penguji2: 'Panel Dosen Penguji 2'
+            };
+            document.getElementById('viewTitle').innerText = titleMap[view] || 'Panel Dosen';
 
-            // ✅ SINKRONISASI DROPDOWN SELEKTOR HANYA MUNCUL DI SISI PENGUJI
-            const containerAkses = document.getElementById('containerAksesDosen');
-            if (view === 'pembimbing') {
-                containerAkses.innerHTML = `
-                    <button class="btn btn-success px-3 shadow-sm" type="button" style="background-color: #14532d; border: none; cursor: default;">
-                        <i class="bi bi-person-badge-fill me-1"></i> <span>Dosen Pembimbing Utama</span>
-                    </button>
-                `;
-            } else {
-                containerAkses.innerHTML = `
-                    <div class="dropdown">
-                        <button class="btn btn-success dropdown-toggle px-3 shadow-sm" type="button" id="dropdownDosenLogin" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: #14532d; border: none;">
-                            <i class="bi bi-person-circle me-1"></i> <span id="lblDosenAktif">${dosenAktifLogin}</span>
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="dropdownDosenLogin" style="border-radius: 10px;">
-                            <li><h6 class="dropdown-header">Simulasi Switch Akun Dosen</h6></li>
-                            <li><a class="dropdown-item fw-medium text-success" onclick="gantiSesiDosen('Dr. Nahrun Hartono, M.Kom.')"><i class="bi bi-person-fill text-success me-2"></i>Dr. Nahrun Hartono, M.Kom. (P1)</a></li>
-                            <li><a class="dropdown-item fw-medium text-primary" onclick="gantiSesiDosen('Nurhidayah')"><i class="bi bi-person-fill text-primary me-2"></i>Nurhidayah (P2)</a></li>
-                            <li><a class="dropdown-item fw-medium text-dark" onclick="gantiSesiDosen('Dr. Ahmad, M.T.')"><i class="bi bi-person-fill text-dark me-2"></i>Dr. Ahmad, M.T.</a></li>
-                            <li><a class="dropdown-item fw-medium text-dark" onclick="gantiSesiDosen('Rahmat')"><i class="bi bi-person-fill text-dark me-2"></i>Rahmat</a></li>
-                        </ul>
-                    </div>
-                `;
-            }
-
+            renderPilihanAkunDosen();
             render();
         }
 
@@ -347,6 +389,7 @@
         }
 
         function render() {
+            renderPilihanAkunDosen();
             let db = JSON.parse(localStorage.getItem('database_ujian')) || [];
 
             if (currentView === 'pembimbing') {
@@ -395,8 +438,8 @@
                     `;
                 });
 
-            } else if (currentView === 'penguji') {
-                const tbody = document.getElementById('tbodyPenguji');
+            } else if (currentView === 'penguji1' || currentView === 'penguji2') {
+                const tbody = currentView === 'penguji1' ? document.getElementById('tbodyPenguji1') : document.getElementById('tbodyPenguji2');
                 tbody.innerHTML = '';
 
                 let dataFilter = [];
@@ -407,57 +450,35 @@
                 }
 
                 if (dataFilter.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="5" class="text-center text-secondary py-4">Belum ada agenda jadwal sidang masuk dari Admin Prodi</td></tr>`;
+                    tbody.innerHTML = `<tr><td colspan="4" class="text-center text-secondary py-4">Belum ada agenda jadwal sidang masuk dari Admin Prodi</td></tr>`;
                     return;
                 }
 
                 dataFilter.forEach(item => {
                     let isSempro = item.jenis === 'Proposal';
+                    let pengujiKey = currentView === 'penguji1' ? 'penguji1' : 'penguji2';
+                    let targetLabel = currentView === 'penguji1' ? (item.penguji1 || 'Penguji 1') : (item.penguji2 || 'Penguji 2');
+                    let bolehIsi = currentView === 'penguji1' ? (dosenRoleAktif === 'penguji1' || dosenRoleAktif === 'pembimbing') : (dosenRoleAktif === 'penguji2' || dosenRoleAktif === 'pembimbing');
 
-                    let p1Target = item.penguji1 || "Dr. Nahrun Hartono, M.Kom.";
-                    let p2Target = item.penguji2 || "Nurhidayah";
-
-                    let namaLoginBersih = dosenAktifLogin.toLowerCase().replace(/[^a-z]/g, "");
-                    let namaP1Bersih = p1Target.toLowerCase().replace(/[^a-z]/g, "");
-                    let namaP2Bersih = p2Target.toLowerCase().replace(/[^a-z]/g, "");
-
-                    let bolehIsiP1 = namaLoginBersih.includes(namaP1Bersih) || namaP1Bersih.includes(namaLoginBersih);
-                    let bolehIsiP2 = namaLoginBersih.includes(namaP2Bersih) || namaP2Bersih.includes(namaLoginBersih);
-
-                    let inputPenguji1 = `
-                        <div class="p-2 rounded mb-1" style="${bolehIsiP1 ? 'border: 1px solid #14532d; background-color: #f0fdf4;' : 'opacity: 0.7; background-color: #f1f5f9;'}">
-                            <small class="d-block fw-bold mb-1 text-dark text-wrap" style="font-size:10px;"><i class="bi bi-person-badge"></i> ${p1Target}</small>
-                            <select class="form-select form-select-sm mb-2" id="lulus-penguji1-${item.id}" ${!bolehIsiP1 ? 'disabled' : ''}>
-                                <option value="lulus" ${item.kelulusanPenguji1 === 'lulus' ? 'selected' : ''}>Lulus</option>
-                                <option value="tidak" ${item.kelulusanPenguji1 === 'tidak' ? 'selected' : ''}>Revisi</option>
+                    let inputPenguji = `
+                        <div class="p-2 rounded mb-1" style="${bolehIsi ? 'border: 1px solid #14532d; background-color: #f0fdf4;' : 'opacity: 0.7; background-color: #f1f5f9;'}">
+                            <small class="d-block fw-bold mb-1 text-dark text-wrap" style="font-size:10px;"><i class="bi bi-person-badge"></i> ${targetLabel}</small>
+                            <select class="form-select form-select-sm mb-2" id="lulus-${pengujiKey}-${item.id}" ${!bolehIsi ? 'disabled' : ''}>
+                                <option value="lulus" ${pengujiKey === 'penguji1' ? (item.kelulusanPenguji1 === 'lulus' ? 'selected' : '') : (item.kelulusanPenguji2 === 'lulus' ? 'selected' : '')}>Lulus</option>
+                                <option value="tidak" ${pengujiKey === 'penguji1' ? (item.kelulusanPenguji1 === 'tidak' ? 'selected' : '') : (item.kelulusanPenguji2 === 'tidak' ? 'selected' : '')}>Revisi</option>
                             </select>
-                            <textarea class="form-control form-control-sm mb-2" id="catatan-penguji1-${item.id}" rows="1" placeholder="Catatan..." ${!bolehIsiP1 ? 'readonly' : ''}>${item.catatanPenguji1 || ''}</textarea>
-                            <input type="number" class="form-control form-control-sm mb-2 ${isSempro ? 'd-none' : ''}" id="skor-penguji1-${item.id}" value="${item.nilaiPenguji1 !== '-' ? item.nilaiPenguji1 : ''}" placeholder="Skor 0-100" ${!bolehIsiP1 ? 'readonly' : ''}>
-                            <button class="btn btn-dark btn-sm w-100" style="font-size:11px;" onclick="kunciNilai(${item.id}, 'penguji1', ${isSempro})" ${!bolehIsiP1 ? 'disabled' : ''}>Kunci P1</button>
+                            <textarea class="form-control form-control-sm mb-2" id="catatan-${pengujiKey}-${item.id}" rows="1" placeholder="Catatan..." ${!bolehIsi ? 'readonly' : ''}>${pengujiKey === 'penguji1' ? (item.catatanPenguji1 || '') : (item.catatanPenguji2 || '')}</textarea>
+                            <input type="number" class="form-control form-control-sm mb-2 ${isSempro ? 'd-none' : ''}" id="skor-${pengujiKey}-${item.id}" value="${pengujiKey === 'penguji1' ? (item.nilaiPenguji1 !== '-' ? item.nilaiPenguji1 : '') : (item.nilaiPenguji2 !== '-' ? item.nilaiPenguji2 : '')}" placeholder="Skor 0-100" ${!bolehIsi ? 'readonly' : ''}>
+                            <button class="btn btn-dark btn-sm w-100" style="font-size:11px;" onclick="kunciNilai(${item.id}, '${pengujiKey}', ${isSempro})" ${!bolehIsi ? 'disabled' : ''}>Kunci ${currentView === 'penguji1' ? 'P1' : 'P2'}</button>
                         </div>
                     `;
 
-                    let inputPenguji2 = `
-                        <div class="p-2 rounded mb-1" style="${bolehIsiP2 ? 'border: 1px solid #1e40af; background-color: #eff6ff;' : 'opacity: 0.7; background-color: #f1f5f9;'}">
-                            <small class="d-block fw-bold mb-1 text-dark text-wrap" style="font-size:10px;"><i class="bi bi-person-badge"></i> ${p2Target}</small>
-                            <select class="form-select form-select-sm mb-2" id="lulus-penguji2-${item.id}" ${!bolehIsiP2 ? 'disabled' : ''}>
-                                <option value="lulus" ${item.kelulusanPenguji2 === 'lulus' ? 'selected' : ''}>Lulus</option>
-                                <option value="tidak" ${item.kelulusanPenguji2 === 'tidak' ? 'selected' : ''}>Revisi</option>
-                            </select>
-                            <textarea class="form-control form-control-sm mb-2" id="catatan-penguji2-${item.id}" rows="1" placeholder="Catatan..." ${!bolehIsiP2 ? 'readonly' : ''}>${item.catatanPenguji2 || ''}</textarea>
-                            <input type="number" class="form-control form-control-sm mb-2 ${isSempro ? 'd-none' : ''}" id="skor-penguji2-${item.id}" value="${item.nilaiPenguji2 !== '-' ? item.nilaiPenguji2 : ''}" placeholder="Skor 0-100" ${!bolehIsiP2 ? 'readonly' : ''}>
-                            <button class="btn btn-dark btn-sm w-100" style="font-size:11px;" onclick="kunciNilai(${item.id}, 'penguji2', ${isSempro})" ${!bolehIsiP2 ? 'disabled' : ''}>Kunci P2</button>
-                        </div>
-                    `;
-
-                    // ✅ KOLOM STATUS KELULUSAN AKHIR SUDAH DIHAPUS DARI MARI (SINKRON KE MAHASISWA DAN ADMIN)
                     tbody.innerHTML += `
                         <tr>
                             <td><b>${item.nama}</b><br><small class="text-secondary">NIM: ${item.nim}</small></td>
                             <td><span class="badge bg-success mb-1">${item.jenis}</span><br><small class="text-muted d-block" style="font-size:11px; line-height:1.3;">${item.jadwal}</small></td>
                             <td class="small fw-medium" style="max-width:180px;">${item.judul}</td>
-                            <td>${inputPenguji1}</td>
-                            <td>${inputPenguji2}</td>
+                            <td>${inputPenguji}</td>
                         </tr>
                     `;
                 });
